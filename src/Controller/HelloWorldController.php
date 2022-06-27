@@ -1,9 +1,11 @@
 <?php
-
+namespace App\Controller;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HelloWorldController
+
+class HelloWorldController extends AbstractController
 {
 
 
@@ -11,9 +13,9 @@ class HelloWorldController
 
 
     public function helloworld(){
-
-        return new Response(
-            '<html><title>Hello!</title><h1>Hello world!</h1></html>'
-        );
+        $userName='Ovi';
+        return $this->render('helloworld.html.twig',['name'=> $userName,]);
     }
+
+    #HW: Database, Entities.
 }
