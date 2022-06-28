@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello ChargeITMainPageController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    table,th,td { border:1px solid black; text-align: center; }
+</style>
+
+<div class="example-wrapper">
+    <h1>Hello {{ controller_name }}! ✅</h1>
+
+    This friendly message is coming from:
+    <ul>
+        <li>Your controller at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/src/Controller/ChargeITMainPageController.php'|file_link(0) }}">src/Controller/ChargeITMainPageController.php</a></code></li>
+        <li>Your template at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/templates/charge_it_main_page/index.html.twig'|file_link(0) }}">templates/charge_it_main_page/index.html.twig</a></code></li>
+    </ul>
+    Here is the array:
+    <table style="width:100%">
+        <tr>
+            <th>Statie</th>
+            <th>Locatie</th>
+            <th>Tip</th>
+            <th>Output</th>
+        </tr>
+    {% for row in station %}
+        <tr>
+        <td>{{ row.name }}</td>
+            <td>{{ row.location }}</td>
+            <td>
+            {% for row2 in plug[row.location] %}
+                {{ row2.type }}
+                <br>
+            {% endfor %}
+            </td>
+            <td>
+            {% for row2 in plug[row.location] %}
+                {{ row2.max_output }}
+                <br>
+            {% endfor %}
+            </td>
+        </tr>
+    {% endfor %}
+    </table>
+</div>
+{% endblock %}
