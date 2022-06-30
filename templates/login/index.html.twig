@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ChargeIT Login{% endblock %}
+{% block body %}
+<link rel="stylesheet" type="text/css" href="/assets/login/style.css" />
+<script src="/assets/login/script.js"></script>
+<div class="container" id="container">
+    <head>
+        <!-- Design by foolishdeveloper.com -->
+        <link rel="preconnect" href="https://fonts.gstatic.com">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+    </head>
+    <div class="background">
+{#        <div class="shape"></div>#}
+{#        <div class="shape"></div>#}
+    </div>
+    <form class="login" action="{{ path('app_login') }}" method="post">
+        <h3>Login Here</h3>
+
+            {% if error %}
+                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+        <label for="username">Username</label>
+        <input type="text" placeholder="Email Address" id="username" name="_username" value="{{ last_username }}">
+
+        <label for="password">Password</label>
+        <input type="password" placeholder="Password"  id="password" name="_password"/>
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+        <button type="submit">Log In</button>
+        <div class="social">
+            <div onclick="location.href='/register'"class="go">Sign Up</div>
+            {#            <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>#}
+        </div>
+    </form>
+
+</div>
+{% endblock %}
+{#{% block body %}#}
+{#    {% if error %}#}
+{#        <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>#}
+{#    {% endif %}#}
+{#<style>#}
+{#    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }#}
+{#    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }#}
+{#</style>#}
+
+{#<div class="example-wrapper">#}
+{#    <h1>Hello! ✅</h1>#}
+
+{#    <form action="{{ path('app_login') }}" method="post">#}
+{#        <label for="username">Email:</label>#}
+{#        <input type="text" id="username" name="_username" value="{{ last_username }}"/>#}
+
+{#        <label for="password">Password:</label>#}
+{#        <input type="password" id="password" name="_password"/>#}
+
+{#        #}{# If you want to control the URL the user is redirected to on success#}
+{#        <input type="hidden" name="_target_path" value="/account"/> #}
+{#        <input type="hidden" name="_target_path" value="/"/>#}
+{#        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">#}
+{#        <button type="submit">login</button>#}
+{#    </form>#}
+
+{#</div>#}
+{#{% endblock %}#}

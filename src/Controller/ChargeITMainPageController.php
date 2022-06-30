@@ -15,18 +15,12 @@ class ChargeITMainPageController extends AbstractController
     #[Route('/', name: 'app_chargeit_main_page')]
     public function index(ManagerRegistry $doctrine): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // Fetch stations and plugs
         $station = $doctrine->getRepository(Station::class)->findAll();
         $plug = $doctrine->getRepository(Plug::class)->findAll();
         //Build the array containing the plugs based on each station
-        $output = array();
-        foreach($plug as $p){
-            $key=$p->getStation();
-            if(!array_key_exists($key,$output))
-                $output[$key]=array($p);
-            else
-                $output[$key][] = $p;
-        }
+        $output=$this->build_plug_array($plug,$station);
         // FOR DEBUGGING
 //        foreach($output as $o){
 //            print_r($o);
@@ -43,6 +37,18 @@ class ChargeITMainPageController extends AbstractController
             'controller_name' => 'ChargeITMainPageController',
             'station' => $station,
             'plug' => $output,
+            'name' => $this->getUser()->getName(),
         ]);
+    }
+    public function build_plug_array(array $plug,array $station): ?array{
+        $output = array();
+        foreach($plug as $p){
+            $key=$p->getStation();
+            if(!array_key_exists($key,$output))
+                $output[$key]=array($p);
+            else
+                $output[$key][] = $p;
+        }
+        return $output;
     }
 }

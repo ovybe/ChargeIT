@@ -10,16 +10,22 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
+    <h1>Hello {{ name }}! ✅</h1>
+    <form action="{{ path('app_logout') }}">
+        <input type="submit" value="Logout" />
+    </form>
     This friendly message is coming from:
     <ul>
         <li>Your controller at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/src/Controller/ChargeITMainPageController.php'|file_link(0) }}">src/Controller/ChargeITMainPageController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/templates/charge_it_main_page/index.html.twig'|file_link(0) }}">templates/charge_it_main_page/index.html.twig</a></code></li>
     </ul>
+    <form action="{{ path('app_create_station') }}">
+        <input type="submit" value="Create Station" />
+    </form>
     Here is the array:
     <table style="width:100%">
         <tr>
+            <th>Buttons</th>
             <th>Statie</th>
             <th>Locatie</th>
             <th>Tip</th>
@@ -27,19 +33,27 @@
         </tr>
     {% for row in station %}
         <tr>
+            <td>
+                <a href="/admin/edit/station/{{ row.uuid }}">Edit</a>
+                <a href="/admin/delete/station/{{ row.uuid }}">Delete</a>
+            </td>
         <td>{{ row.name }}</td>
             <td>{{ row.location }}</td>
             <td>
-            {% for row2 in plug[row.location] %}
+                {% if row.id in plug|keys %}
+            {% for row2 in plug[row.id] %}
                 {{ row2.type }}
                 <br>
             {% endfor %}
+                {% endif %}
             </td>
             <td>
-            {% for row2 in plug[row.location] %}
+                {% if row.id in plug|keys %}
+            {% for row2 in plug[row.id] %}
                 {{ row2.max_output }}
                 <br>
             {% endfor %}
+                {% endif %}
             </td>
         </tr>
     {% endfor %}

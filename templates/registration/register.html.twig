@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ChargeIT Register{% endblock %}
+{% block body %}
+    <link rel="stylesheet" type="text/css" href="/assets/login/style.css" />
+    <script src="/assets/login/script.js"></script>
+    <div class="container" id="container">
+        <head>
+            <!-- Design by foolishdeveloper.com -->
+            <title>Login</title>
+
+            <link rel="preconnect" href="https://fonts.gstatic.com">
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+            <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet">
+        </head>
+        <div class="background">
+{#            <div class="shape"></div>#}
+{#            <div class="shape"></div>#}
+        </div>
+        {{ form_start(registrationForm) }}
+            <h3>Register here</h3>
+
+            <div>
+                {{ form_errors(registrationForm.name) }}
+                {{ form_errors(registrationForm.email) }}
+                {{ form_errors(registrationForm.plainPassword) }}
+            </div>
+
+            <label for="email">Email</label>
+            {{ form_widget(registrationForm.email, {'attr': {'id':'email','placeholder': 'Email Address'}}) }}
+{#            <input type="text" placeholder="Email or Phone" id="username" name="_username" value="{{ last_username }}">#}
+            <label for="name">Username</label>
+            {{ form_widget(registrationForm.name, {'attr': {'id':'name','placeholder': 'Name'}}) }}
+            <label for="password">Password</label>
+            {{ form_widget(registrationForm.plainPassword, {'attr': {'id':'password','placeholder': 'Password'}}) }}
+{#            <input type="password" placeholder="Password"  id="password" name="_password"/>#}
+
+            <button type="submit">Register</button>
+            <div class="social">
+                <div onclick="location.href='/login'" class="go">Sign In</div>
+                {#            <div class="fb"><i class="fab fa-facebook"></i>  Facebook</div>#}
+            </div>
+        {{ form_end(registrationForm) }}
+    </div>
+{% endblock %}
+{#{% block body %}#}
+{#    <h1>Register</h1>#}
+
+{#    {{ form_start(registrationForm) }}#}
+{#        {{ form_row(registrationForm.email) }}#}
+{#        {{ form_row(registrationForm.name)  }}#}
+{#        {{ form_row(registrationForm.plainPassword, {#}
+{#            label: 'Password'#}
+{#        }) }}#}
+{#        {{ form_row(registrationForm.agreeTerms) }}#}
+
+{#        <button type="submit" class="btn">Register</button>#}
+{#    {{ form_end(registrationForm) }}#}
+{#{% endblock %}#}

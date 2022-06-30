@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\PlugRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: PlugRepository::class)]
 class Plug
@@ -17,7 +18,7 @@ class Plug
     private $status;
 
     #[ORM\ManyToOne(targetEntity: Station::class)]
-    #[ORM\JoinColumn(referencedColumnName: 'location',nullable: false)]
+    #[ORM\JoinColumn(referencedColumnName: 'id',nullable: false)]
     private $station;
 
     #[ORM\Column(type: 'string', length: 10)]
@@ -43,12 +44,12 @@ class Plug
         return $this;
     }
 
-    public function getStation(): ?string
+    public function getStation(): ?int
     {
-        return $this->station->getLocation();
+        return $this->station->getId();
     }
 
-    public function setStation(string $station_id): self
+    public function setStation(Uuid $station_id): self
     {
         $this->station = $station_id;
 

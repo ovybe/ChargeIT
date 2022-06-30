@@ -13,7 +13,7 @@ class UsersCars
     #[ORM\Column(type: 'integer')]
     private $id;
 
-    #[ORM\ManyToOne(targetEntity: User::class)]
+    #[ORM\ManyToOne(targetEntity: Users::class)]
     #[ORM\JoinColumn(referencedColumnName: 'email',nullable: false)]
     private $user;
 
