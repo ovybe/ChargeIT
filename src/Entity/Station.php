@@ -2,15 +2,22 @@
 
 namespace App\Entity;
 
-use App\Repository\StationsRepository;
+use App\Repository\StationRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Uid\Uuid;
 
-#[ORM\Entity(repositoryClass: StationsRepository::class)]
+#[ORM\Entity(repositoryClass: StationRepository::class)]
 class Station
 {
     #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column(type: 'integer')]
+    private $id;
+
+    #[ORM\Column(type:'guid',unique:true)]
+    private $uuid;
+
     #[ORM\Column(type: 'string', length: 30)]
-    #[ORM\OneToMany(targetEntity:'Plug',mappedBy:'station')]
     private $location;
 
     #[ORM\Column(type: 'string', length: 50)]
@@ -19,6 +26,16 @@ class Station
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
+    }
+    public function genUuid(): self
+    {
+            $this->uuid = Uuid::v4();
+            return $this;
     }
 
     public function getLocation(): ?string
