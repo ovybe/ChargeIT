@@ -7,6 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Uid\Uuid;
 
 #[ORM\Entity(repositoryClass: UsersRepository::class)]
 #[UniqueEntity(fields: ['email'], message: 'There is already an account with this email')]
@@ -28,6 +29,9 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'string', length: 50)]
     private $name;
+
+    #[ORM\Column(type: 'guid', unique: true)]
+    private $uuid;
 
     public function getId(): ?int
     {
@@ -108,6 +112,18 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     {
         $this->name = $name;
 
+        return $this;
+    }
+
+    public function getUuid(): ?string
+    {
+        return $this->uuid;
+    }
+    public function genUuid(): self
+    {
+        $namespace = Uuid::v4();
+        $name = $this->getEmail();
+        $this->uuid = Uuid::v5($namespace,$name);
         return $this;
     }
 }

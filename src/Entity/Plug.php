@@ -49,9 +49,9 @@ class Plug
         return $this->station->getId();
     }
 
-    public function setStation(Uuid $station_id): self
+    public function setStation(Station $station): self
     {
-        $this->station = $station_id;
+        $this->station = $station;
 
         return $this;
     }
@@ -74,6 +74,18 @@ class Plug
     }
 
     public function setMax_Output(string $max_output): self
+    {
+        $this->max_output = $max_output;
+
+        return $this;
+    }
+    // for some reason main recognises Max_Output, while the Admin page for editing the plug doesn't. Had to add these.
+    public function getMaxOutput(): ?string
+    {
+        return $this->max_output;
+    }
+
+    public function setMaxOutput(string $max_output): self
     {
         $this->max_output = $max_output;
 

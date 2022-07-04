@@ -69,5 +69,25 @@ class AdminEditStationController extends AbstractController
         $entityManager->flush();
         return $this->redirectToRoute('app_chargeit_main_page');
     }
+    #[Route('/view/station/{uuid}', name: 'app_view_station')]
+    public function view_station(Request $request,ManagerRegistry $doctrine, string $uuid): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $stationrepo = $entityManager->getRepository(Station::class);
+        $station = $stationrepo->findOneBy(['uuid' => $uuid ]);
 
+        $plugsrepo= $entityManager->getRepository(Plug::class);
+        $plugs = $plugsrepo->findBy(['station'=>$station->getId()]);
+
+        if (!$station) {
+            throw $this->createNotFoundException(
+                'No station found for id '.$uuid
+            );
+        }
+
+        return $this->renderForm('view_station/index.html.twig', [
+            'station' => $station,
+            'plug' => $plugs,
+        ]);
+    }
 }

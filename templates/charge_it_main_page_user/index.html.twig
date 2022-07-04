@@ -19,43 +19,18 @@
         <li>Your controller at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/src/Controller/ChargeITMainPageController.php'|file_link(0) }}">src/Controller/ChargeITMainPageController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/templates/charge_it_main_page/index.html.twig'|file_link(0) }}">templates/charge_it_main_page/index.html.twig</a></code></li>
     </ul>
-    <form action="{{ path('app_create_station') }}">
-        <input type="submit" value="Create Station" />
-    </form>
+    <a href="/create/car/">Create car</a><br>
     Here is the array:
     <table style="width:100%">
         <tr>
+            <th>Car Plate</th>
+            <th>Plug Type</th>
             <th>Buttons</th>
-            <th>Statie</th>
-            <th>Locatie</th>
-            <th>Tip</th>
-            <th>Output</th>
         </tr>
-    {% for row in station %}
+    {% for row in cars %}
         <tr>
-            <td>
-                <a href="/view/station/{{ row.uuid }}">View</a> <br>
-                <a href="/admin/edit/station/{{ row.uuid }}">Edit</a>
-                <a href="/admin/delete/station/{{ row.uuid }}">Delete</a>
-            </td>
-        <td>{{ row.name }}</td>
-            <td>{{ row.location }}</td>
-            <td>
-                {% if row.id in plug|keys %}
-            {% for row2 in plug[row.id] %}
-                {{ row2.type }}
-                <br>
-            {% endfor %}
-                {% endif %}
-            </td>
-            <td>
-                {% if row.id in plug|keys %}
-            {% for row2 in plug[row.id] %}
-                {{ row2.max_output }}
-                <br>
-            {% endfor %}
-                {% endif %}
-            </td>
+        <td>{{ row.plate }}</td>
+        <td>{{ row.plug_type }}</td>
         </tr>
     {% endfor %}
     </table>

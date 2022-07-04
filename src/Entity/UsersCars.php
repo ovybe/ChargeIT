@@ -14,7 +14,7 @@ class UsersCars
     private $id;
 
     #[ORM\ManyToOne(targetEntity: Users::class)]
-    #[ORM\JoinColumn(referencedColumnName: 'email',nullable: false)]
+    #[ORM\JoinColumn(referencedColumnName: 'id',nullable: false)]
     private $user;
 
     #[ORM\ManyToOne(targetEntity: Car::class)]
@@ -26,12 +26,12 @@ class UsersCars
         return $this->id;
     }
 
-    public function getUserId(): ?User
+    public function getUserId(): ?Users
     {
         return $this->user;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUserId(?Users $user_id): self
     {
         $this->user = $user_id;
 

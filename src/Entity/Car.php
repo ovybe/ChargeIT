@@ -47,15 +47,27 @@ class Car
         return $this;
     }
 
+    public function getPlug_Type(): ?string
+    {
+        return $this->plug_type;
+    }
+
+    public function setPlug_Type(string $plug_type): self
+    {
+        $this->plug_type = $plug_type;
+
+        return $this;
+    }
+
     /**
-     * @return Collection<int, User>
+     * @return Collection<int, Users>
      */
     public function getUserId(): Collection
     {
         return $this->user_id;
     }
 
-    public function addUserId(User $userId): self
+    public function addUserId(Users $userId): self
     {
         if (!$this->user_id->contains($userId)) {
             $this->user_id[] = $userId;
@@ -64,7 +76,7 @@ class Car
         return $this;
     }
 
-    public function removeUserId(User $userId): self
+    public function removeUserId(Users $userId): self
     {
         $this->user_id->removeElement($userId);
 

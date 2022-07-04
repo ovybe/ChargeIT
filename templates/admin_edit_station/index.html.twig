@@ -16,19 +16,34 @@
         {{ form_row(form.name) }}
         {{ form_row(form.location)  }}
 
+        <a href="/admin/create/plug/{{ station.id }}">Create plug</a>
         <table style="width:100%">
             <tr>
                 <th>Plug Id</th>
-                <th>Output</th>
                 <th>Tip</th>
+                <th>Output</th>
+                <th>Status</th>
+                <th>Buttons</th>
             </tr>
             {% for row2 in plug %}
             <tr>
                 <td>{{ row2.id }}</td>
                 <td>{{ row2.type }}</td>
                 <td>{{ row2.max_output }}</td>
+                <td>
+                    {% if row2.status==1 %}
+                        ON
+                    {% else %}
+                        OFF
+                    {% endif  %}
+                </td>
+                <td><a href="/admin/edit/plug/{{ row2.id }}">Edit</a>
+                    <a href="/admin/delete/plug/{{ row2.id }}">Delete</a>
+                </td>
+
             </tr>
             {% endfor %}
+        </table>
         <button type="submit" class="btn">Edit</button>
         {{ form_end(form) }}
 
