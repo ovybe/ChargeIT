@@ -20,6 +20,11 @@ class Station
     #[ORM\Column(type: 'string', length: 30)]
     private $location;
 
+    #[ORM\Column(type:'decimal', length: 6, precision:5)]
+    private $latitude;
+    #[ORM\Column(type:'decimal', length: 6, precision:5)]
+    private $longitude;
+
     #[ORM\Column(type: 'string', length: 50)]
     private $name;
 
@@ -47,6 +52,31 @@ class Station
     {
         $this->location = $location;
 
+        return $this;
+    }
+
+
+    public function getLatitude(): ?string
+    {
+        return $this->latitude;
+    }
+
+
+    public function setLatitude($latitude): self
+    {
+        $this->latitude = $latitude;
+        return $this;
+    }
+
+    public function getLongitude(): ?string
+    {
+        return $this->longitude;
+    }
+
+
+    public function setLongitude($longitude): self
+    {
+        $this->longitude = $longitude;
         return $this;
     }
 

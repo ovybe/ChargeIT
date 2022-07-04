@@ -10,19 +10,19 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
     {{ form_start(form) }}
-    <label for="plate">Plate</label>
-    <br>
-    {{ form_widget(form.plate, {'attr': {'id':'plate','placeholder': 'AR 00 TES'}}) }}
-    <br>
-    <label for="plate">Plug Type</label>
-    <br>
-    {{ form_widget(form.plug_type, {'attr': {'id':'plug_type','placeholder': 'Plug Type'}}) }}
-{#    {{ form_errors(form.plate) }}#}
-    <br>
-    {% if app.request.attributes.get('_route')=='app_create_car' %}
+{#    <label for="station">Station:</label>#}
+{#    <select class="form-control" id="station">#}
+{#        {% for oneStation in stations %}#}
+{#            {% set selected = '' %}#}
+{#            <option value="{{ oneStation.id }}">{{ oneStation.name }}</option>#}
+{#        {% endfor %}#}
+{#    </select>#}
+    {{ form_row(form.start_time) }}
+    {{ form_row(form.duration)  }}
+    {{ form_row(form.car) }}
+{#    {[ form_row(form.plug) }}#}
+    {% if app.request.attributes.get('_route')=='app_create_booking' %}
     <button type="submit" class="btn">Create</button>
     {% else %}
     <button type="submit" class="btn">Edit</button>

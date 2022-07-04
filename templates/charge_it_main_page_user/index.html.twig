@@ -3,6 +3,8 @@
 {% block title %}Hello ChargeITMainPageController!{% endblock %}
 
 {% block body %}
+    {% include 'navbar/navbar.html.twig' %}
+
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -10,29 +12,26 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ name }}! ✅</h1>
-    <form action="{{ path('app_logout') }}">
-        <input type="submit" value="Logout" />
-    </form>
     This friendly message is coming from:
     <ul>
         <li>Your controller at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/src/Controller/ChargeITMainPageController.php'|file_link(0) }}">src/Controller/ChargeITMainPageController.php</a></code></li>
         <li>Your template at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/templates/charge_it_main_page/index.html.twig'|file_link(0) }}">templates/charge_it_main_page/index.html.twig</a></code></li>
     </ul>
-    <a href="/create/car/">Create car</a><br>
     Here is the array:
     <table style="width:100%">
         <tr>
             <th>Car Plate</th>
             <th>Plug Type</th>
-            <th>Buttons</th>
+            <th>Actions</th>
         </tr>
     {% for row in cars %}
         <tr>
         <td>{{ row.plate }}</td>
         <td>{{ row.plug_type }}</td>
+            <td><a href="/edit/car/{{ row.plate  }}">Edit</a><br><a href="/delete/car/{{ row.plate  }}">Delete</a></td>
         </tr>
     {% endfor %}
     </table>
 </div>
+
 {% endblock %}

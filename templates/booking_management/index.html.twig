@@ -1,22 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CreateStationController!{% endblock %}
+{% block title %}Hello BookingManagementController!{% endblock %}
 
 {% block body %}
     {% include 'navbar/navbar.html.twig' %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    table,th,td { border:1px solid black; text-align: center; }
 </style>
 
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
-
-    {{ form_start(form) }}
-    {{ form_row(form.name) }}
-    {{ form_row(form.location)  }}
-
-    <button type="submit" class="btn">Create</button>
-    {{ form_end(form) }}
+    <table style="width:100%">
+        <tr>
+            <th>ID</th>
+        </tr>
+        {% for row in booking %}
+            {% for row2 in row %}
+                <th>{{ row2.id }}</th>
+            {% endfor %}
+        {% endfor %}
+    </table>
 </div>
 {% endblock %}
