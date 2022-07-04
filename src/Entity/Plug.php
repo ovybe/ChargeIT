@@ -27,6 +27,9 @@ class Plug
     #[ORM\Column(type: 'decimal', precision: 5, scale: 1)]
     private $max_output;
 
+    #[ORM\Column(type: 'integer')]
+    private $price;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -89,6 +92,16 @@ class Plug
     {
         $this->max_output = $max_output;
 
+        return $this;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
+    }
+    public function setPrice(int $price): self
+    {
+        $this->price = $price;
         return $this;
     }
 }
