@@ -15,9 +15,16 @@
                 <li class="nav-item">
                     <a class="nav-link {{ app.request.get('_route') == 'app_chargeit_main_page_user' ? 'active' }}" aria-current="page" href="/">Home</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link {{ app.request.get('_route') == 'app_create_car' ? 'active' }}" href="/create/car">Create Car</a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle {{ app.request.get('_route') == 'app_car_management' or app.request.get('_route') == 'app_create_car' ? 'active' }}" href="/car/management" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Cars
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/car/management/">My Cars</a></li>
+                        <li><a class="dropdown-item" href="/create/car/">Add Car</a></li>
+                    </ul>
                 </li>
+
                 <li class="nav-item">
                     <a class="nav-link {{ app.request.get('_route') == 'app_booking_management' ? 'active' }}" href="/booking/management">Booking</a>
                 </li>

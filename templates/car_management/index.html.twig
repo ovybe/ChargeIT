@@ -7,15 +7,31 @@
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    table { text-align: center;}
 </style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/src/Controller/CarManagementController.php'|file_link(0) }}">src/Controller/CarManagementController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/templates/car_management/index.html.twig'|file_link(0) }}">templates/car_management/index.html.twig</a></code></li>
-    </ul>
-</div>
+    <div class="d-grid gap-2 col-6 mx-auto mb-2" style="width:50%">
+        <h3 style="text-align:center">Car Management</h3>
+    <a class="btn btn-outline-dark" href="/create/car/">Create Car</a>
+    </div>
+    <div id="cardiv" class="container-md">
+    <table class="table table-responsive align-middle table-striped table-hover">
+        <thead class="table-dark">
+        <tr>
+            <th scope="col">Plate</th>
+            <th scope="col">Plug Type</th>
+            <th scope="col">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+    {% for row in cars %}
+        <tr >
+            <td>{{ row.plate }}</td>
+            <td>{{ row.plug_type }}</td>
+            <td><a class="btn btn-dark" href="/edit/car/{{ row.plate  }}">Edit</a> <a class="btn btn-dark" href="/delete/car/{{ row.plate  }}">Delete</a></td>
+        </tr>
+    {% endfor %}
+        </tbody>
+    </table>
+    </div>
 {% endblock %}

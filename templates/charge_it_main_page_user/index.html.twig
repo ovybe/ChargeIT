@@ -12,26 +12,50 @@
 </style>
 
 <div class="example-wrapper">
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/src/Controller/ChargeITMainPageController.php'|file_link(0) }}">src/Controller/ChargeITMainPageController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/Users/lemaw/PhpstormProjects/NetRom/ChargeIT/templates/charge_it_main_page/index.html.twig'|file_link(0) }}">templates/charge_it_main_page/index.html.twig</a></code></li>
-    </ul>
-    Here is the array:
-    <table style="width:100%">
-        <tr>
-            <th>Car Plate</th>
-            <th>Plug Type</th>
-            <th>Actions</th>
-        </tr>
-    {% for row in cars %}
-        <tr>
-        <td>{{ row.plate }}</td>
-        <td>{{ row.plug_type }}</td>
-            <td><a href="/edit/car/{{ row.plate  }}">Edit</a><br><a href="/delete/car/{{ row.plate  }}">Delete</a></td>
-        </tr>
-    {% endfor %}
-    </table>
+    <div class="d-grid gap-2 col-6 mx-auto mb-2" style="width:50%">
+        <h3 style="text-align:center">Station List</h3>
+    </div>
+    <div id="stationdiv" class="container-md">
+        <table class="table table-responsive align-middle table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">Actions</th>
+                <th scope="col">Statie</th>
+                <th scope="col">Locatie</th>
+                <th scope="col">Tip</th>
+                <th scope="col">Output</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for row in station %}
+                <tr>
+                    <td>
+                        <a class="btn btn-dark" href="/view/station/{{ row.uuid }}">View</a>
+                        <a class="btn btn-dark" href="/booking/create/{{ row.id }}">Book</a>
+                    </td>
+                    <td>{{ row.name }}</td>
+                    <td>{{ row.location }}</td>
+                    <td>
+                        {% if row.id in plug|keys %}
+                            {% for row2 in plug[row.id] %}
+                                {{ row2.type }}
+                                <br>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if row.id in plug|keys %}
+                            {% for row2 in plug[row.id] %}
+                                {{ row2.max_output }}
+                                <br>
+                            {% endfor %}
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
 </div>
 
 {% endblock %}

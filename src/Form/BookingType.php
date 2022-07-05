@@ -4,10 +4,12 @@ namespace App\Form;
 
 use App\Entity\Booking;
 use App\Entity\Car;
+use App\Entity\Plug;
 use App\Entity\UsersCars;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Security\Core\Security;
@@ -32,9 +34,15 @@ class BookingType extends AbstractType
             $cars[]=$carsrepo->findOneBy(['plate'=>$uc->getCarId()]);
         }
         $cararray=array();
+        $plugsrepo=$this->entityManager->getRepository(Plug::class);
+        $plugs=$plugsrepo->findBy(['station'=>$options['stationid']]);
+        $availableplugs=array();
+        foreach($plugs as $p){
+            $availableplugs[$p->getId().". ".$p->getType()]=$p;
+        }
         foreach($cars as $c){
             $plate=$c->getPlate();
-            $cararray[$plate]=$plate;
+            $cararray[$plate]=$c;
         }
         // REMINDER: LOOK INTO GEOLOCATION (geocoder)
         $builder
@@ -45,7 +53,9 @@ class BookingType extends AbstractType
                     'Your cars'=> $cararray,
                 ]
             ])
-//            ->add('plug')
+            ->add('plug',ChoiceType::class,[
+                'choices'=>$availableplugs
+            ])
         ;
     }
 
@@ -53,6 +63,8 @@ class BookingType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Booking::class,
+            'stationid' => 0,
         ]);
+        $resolver->setAllowedTypes('stationid','string');
     }
 }

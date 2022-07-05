@@ -4,23 +4,38 @@
 
 {% block body %}
     {% include 'navbar/navbar.html.twig' %}
+    {% set dateFormat = 'Y-m-d h:i A' %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-    table,th,td { border:1px solid black; text-align: center; }
+    table,th,td,.bookingh { text-align: center; }
 </style>
-
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-    <table style="width:100%">
-        <tr>
-            <th>ID</th>
-        </tr>
+    <h3 class="bookingh">My Bookings</h3>
+    <div id="bookdiv" class="container-lg">
+        <table class="table table-responsive align-middle table-striped table-hover">
+            <thead class="table-dark">
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Plate</th>
+                <th scope="col">Plug ID</th>
+                <th scope="col">Plug Type</th>
+                <th scope="col">Start Time</th>
+                <th scope="col">End Time</th>
+                <th scope="col">Duration</th>
+            </tr>
+            </thead>
+            <tbody>
         {% for row in booking %}
             {% for row2 in row %}
                 <th>{{ row2.id }}</th>
+                <th>{{ row2.car.plate }}</th>
+                <th>{{ row2.plug.id }}</th>
+                <th>{{ row2.plug.type }}</th>
+                <th>{{ row2.starttime|date(dateFormat) }}</th>
+                <th>{{ row2.starttime|date_modify(+row2.duration~'hours')|date(dateFormat) }}</th>
+                <th>{{ row2.duration }}</th>
             {% endfor %}
         {% endfor %}
+            </tbody>
     </table>
-</div>
 {% endblock %}

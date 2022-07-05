@@ -36,19 +36,27 @@ class BookingManagementController extends AbstractController
             'booking'=>$bookings,
         ]);
     }
-    #[Route('/booking/create', name: 'app_booking_create')]
-    public function create(Request $request,ManagerRegistry $doctrine): Response
+    #[Route('/booking/create/{uuid}', name: 'app_booking_create')]
+    public function create(Request $request,ManagerRegistry $doctrine,string $uuid): Response
     {
         $booking = new Booking();
         $entityManager = $doctrine->getManager();
-
-        $form = $this->createForm(BookingType::class, $booking);
+        $form = $this->createForm(BookingType::class,$booking, options: ['stationid'=>$uuid]);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $checkbooking = $entityManager->getRepository(Booking::class)->findOneBy(['car'=>$booking->getCar()->getPlate()]);
+            if($checkbooking!=null)
+                {
+                    //error occured
+                    $error="There already is a booking for the car plate '".$checkbooking->getCar()->getPlate()."' !";
+                    return $this->renderForm('booking_form/index.html.twig', [
+                        'form' => $form,
+                        'errors' => $error,
+                    ]);
+                }
             $entityManager->persist($booking);
             $entityManager->flush();
-
             return $this->redirectToRoute('app_booking_management');
         }
 
