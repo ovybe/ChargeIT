@@ -16,7 +16,6 @@ class UsersCars
     #[ORM\ManyToOne(targetEntity: Users::class)]
     #[ORM\JoinColumn(referencedColumnName: 'id',nullable: false)]
     private $user;
-
     #[ORM\ManyToOne(targetEntity: Car::class)]
     #[ORM\JoinColumn(referencedColumnName: 'plate',nullable: false)]
     private $car;

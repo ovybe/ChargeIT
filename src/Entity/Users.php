@@ -16,22 +16,29 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
-    private $id;
+    private int $id;
 
     #[ORM\Column(type: 'string', length: 180, unique: true)]
-    private $email;
+    private string $email;
 
     #[ORM\Column(type: 'json')]
-    private $roles = [];
+    private mixed $roles = [];
 
     #[ORM\Column(type: 'string')]
-    private $password;
+    private string $password;
 
     #[ORM\Column(type: 'string', length: 50)]
-    private $name;
+    private string $name;
 
     #[ORM\Column(type: 'guid', unique: true)]
-    private $uuid;
+    private string $uuid;
+
+//    #[ORM\OneToMany(mappedBy: 'plate', targetEntity: Car::class, orphanRemoval: true, indexBy: 'plate')]
+    #[ORM\ManyToMany(targetEntity: Car::class,inversedBy: 'users')]
+    #[ORM\JoinTable(name:'users_cars')]
+    #[ORM\JoinColumn(name:'user_id',referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name:'car_id',referencedColumnName: 'plate')]
+    private mixed $cars;
 
     public function getId(): ?int
     {
@@ -126,4 +133,22 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->uuid = Uuid::v5($namespace,$name);
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getCars()
+    {
+        return $this->cars;
+    }
+
+    /**
+     * @param mixed $cars
+     */
+    public function setCars($cars): void
+    {
+        $this->cars = $cars;
+    }
+
+
 }

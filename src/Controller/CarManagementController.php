@@ -154,17 +154,10 @@ class CarManagementController extends AbstractController
     {
         $entityManager = $doctrine->getManager();
         $user = $this->getUser();
-
-        $carrepo = $entityManager->getRepository(Car::class);
-        $userscarsrepo = $entityManager->getRepository(UsersCars::class);
-        $userscars = $userscarsrepo->findBy(['user'=>$user->getId()]);
-        $car = array();
-        foreach($userscars as $uc){
-            $car[]=$carrepo->findOneBy(['plate'=>$uc->getCarId()]);
-        }
-
+        $usercars=$user->getCars(); // GET CARS FROM USER
+        // LAZY INITIALIZATION
         return $this->renderForm('car_management/index.html.twig', [
-            'cars' => $car,
+            'cars' => $usercars,
         ]);
     }
 }

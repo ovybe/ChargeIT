@@ -13,10 +13,29 @@ class Car
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 10)]
     #[ORM\OneToMany(targetEntity:'UsersCars',mappedBy:'car')]
-    private $plate;
+    private string $plate;
 
     #[ORM\Column(type: 'string', length: 10)]
-    private $plug_type;
+    private string $plug_type;
+
+    //#[ORM\OneToMany(mappedBy: 'user', targetEntity: Users::class, orphanRemoval: true, indexBy: 'id')]
+    #[ORM\ManyToMany(targetEntity: Users::class,mappedBy: 'cars')]
+    private mixed $users;
+    /**
+     * @return mixed
+     */
+    public function getUsers()
+    {
+        return $this->users;
+    }
+
+    /**
+     * @param mixed $users
+     */
+    public function setUsers($users): void
+    {
+        $this->users = $users;
+    }
 
     public function __construct()
     {
