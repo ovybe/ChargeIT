@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Booking;
 use App\Entity\Car;
-use App\Entity\UsersCarsREDUNDANT;
 use App\Form\BookingType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -49,7 +48,7 @@ class BookingManagementController extends AbstractController
                 {
 //                    dd($checkbooking);
                     //error occured
-                    $error="There already is a booking for the car plate '".$checkbooking->getBookingcar()->getPlate()."' !";
+                    $error="There already is a booking for the car plate '".$checkbooking->getCar()->getPlate()."' !";
                     return $this->renderForm('booking_form/index.html.twig', [
                         'form' => $form,
                         'errors' => $error,
