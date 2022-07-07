@@ -21,7 +21,7 @@ class AdminEditStationController extends AbstractController
         $stationrepo = $entityManager->getRepository(Station::class);
         $station = $stationrepo->findOneBy(['uuid' => $uuid ]);
 
-        $plugs = $station->getStationPlugs();
+        $plugs = $station->getPlugs();
 
         if (!$station) {
             throw $this->createNotFoundException(
@@ -52,7 +52,7 @@ class AdminEditStationController extends AbstractController
         $stationrepo = $entityManager->getRepository(Station::class);
         $station = $stationrepo->findOneBy(['uuid' => $uuid ]);
 
-        $plugs = $station->getStationPlugs();
+        $plugs = $station->getPlugs();
 
         if (!$station) {
             return $this->redirectToRoute('app_chargeit_main_page');
@@ -69,8 +69,7 @@ class AdminEditStationController extends AbstractController
         $stationrepo = $entityManager->getRepository(Station::class);
         $station = $stationrepo->findOneBy(['uuid' => $uuid ]);
 
-        $plugsrepo= $entityManager->getRepository(Plug::class);
-        $plugs = $plugsrepo->findBy(['station'=>$station->getId()]);
+        $plugs = $station->getPlugs();
 
         if (!$station) {
             throw $this->createNotFoundException(

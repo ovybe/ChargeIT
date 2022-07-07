@@ -22,8 +22,8 @@ class Car
     #[ORM\ManyToMany(targetEntity: Users::class,mappedBy: 'cars')]
     private mixed $users;
 
-    #[ORM\OneToOne(inversedBy: 'bookingcar', targetEntity: Booking::class, cascade: ['persist', 'remove'])]
-    private $carbooking;
+    #[ORM\OneToOne(inversedBy: 'car', targetEntity: Booking::class, cascade: ['persist', 'remove'])]
+    private $booking;
     /**
      * @return mixed
      */
@@ -113,14 +113,14 @@ class Car
         return $this;
     }
 
-    public function getCarBooking(): ?Booking
+    public function getBooking(): ?Booking
     {
-        return $this->carbooking;
+        return $this->booking;
     }
 
-    public function setCarBooking(?Booking $carbooking): self
+    public function setBooking(?Booking $booking): self
     {
-        $this->carbooking = $carbooking;
+        $this->booking = $booking;
 
         return $this;
     }

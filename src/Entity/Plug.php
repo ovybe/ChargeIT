@@ -17,7 +17,7 @@ class Plug
     #[ORM\Column(type: 'boolean')]
     private $status;
 
-    #[ORM\ManyToOne(targetEntity: Station::class, inversedBy: 'stationPlugs')]
+    #[ORM\ManyToOne(targetEntity: Station::class, inversedBy: 'plugs')]
     #[ORM\JoinColumn(referencedColumnName: 'id',nullable: false)]
     private $station;
 

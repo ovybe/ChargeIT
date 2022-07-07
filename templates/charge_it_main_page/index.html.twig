@@ -35,13 +35,13 @@
                     <td>{{ row.name }}</td>
                     <td>{{ row.location }}</td>
                     <td>
-                            {% for plug in row.getStationPlugs %}
+                            {% for plug in row.getPlugs() %}
                                 {{ plug.type }}
                                 <br>
                             {% endfor %}
                     </td>
                     <td>
-                            {% for plug in row.getStationPlugs() %}
+                            {% for plug in row.getPlugs() %}
                                 {{ plug.max_output }}
                                 <br>
                             {% endfor %}

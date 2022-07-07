@@ -29,7 +29,7 @@
         {% for row in booking %}
             <tr>
             <th>{{ row.id }}</th>
-            <th>{{ row.bookingcar.plate }}</th>
+            <th>{{ row.car.plate }}</th>
             <th>{{ row.plug.id }}</th>
             <th>{{ row.plug.type }}</th>
             <th>{{ row.starttime|date(dateFormat) }}</th>

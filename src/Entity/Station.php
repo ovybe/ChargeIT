@@ -31,11 +31,11 @@ class Station
     private $name;
 
     #[ORM\OneToMany(mappedBy: 'station', targetEntity: Plug::class, orphanRemoval: true)]
-    private $stationPlugs;
+    private $plugs;
 
     public function __construct()
     {
-        $this->stationPlugs = new ArrayCollection();
+        $this->plugs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -105,27 +105,27 @@ class Station
     /**
      * @return Collection<int, Plug>
      */
-    public function getStationPlugs(): Collection
+    public function getPlugs(): Collection
     {
-        return $this->stationPlugs;
+        return $this->plugs;
     }
 
-    public function addStationPlug(Plug $stationPlug): self
+    public function addPlug(Plug $plug): self
     {
-        if (!$this->stationPlugs->contains($stationPlug)) {
-            $this->stationPlugs[] = $stationPlug;
-            $stationPlug->setStation($this);
+        if (!$this->plugs->contains($plug)) {
+            $this->plugs[] = $plug;
+            $plug->setStation($this);
         }
 
         return $this;
     }
 
-    public function removeStationPlug(Plug $stationPlug): self
+    public function removePlug(Plug $plug): self
     {
-        if ($this->stationPlugs->removeElement($stationPlug)) {
+        if ($this->plugs->removeElement($plug)) {
             // set the owning side to null (unless already changed)
-            if ($stationPlug->getStation() === $this) {
-                $stationPlug->setStation(null);
+            if ($plug->getStation() === $this) {
+                $plug->setStation(null);
             }
         }
 

@@ -51,11 +51,8 @@ class CarManagementController extends AbstractController
 //        return 0;
 //    }
     public function CarVerifyDelete(ObjectManager $entityManager,Car $car,Users $user){
-        //dd($carcheck);
-        //dd($car->getCarBooking());
-        if ($car->getCarBooking() == null) {
+        if ($car->getBooking() == null) {
             $multipleusercheck = $car->getUsers();
-//            dd($multipleusercheck);
             $multipleusercheck->removeElement($user);
             $user->getCars()->removeElement($car);
             $entityManager->flush();

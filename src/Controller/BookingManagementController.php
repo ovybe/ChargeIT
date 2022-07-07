@@ -26,7 +26,7 @@ class BookingManagementController extends AbstractController
         $bookings=array();
         foreach($cars as $c){
 //            $book=$c->getCarBooking();
-            if(($book=$c->getCarBooking())!=null)
+            if(($book=$c->getBooking())!=null)
                 $bookings[]=$book;
         }
 //        dd($bookings);
@@ -44,10 +44,10 @@ class BookingManagementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $checkbooking=$booking->getBookingcar()->getCarBooking();
+            $checkbooking=$booking->getCar()->getBooking();
             if($checkbooking!=null)
                 {
-                    dd($checkbooking);
+//                    dd($checkbooking);
                     //error occured
                     $error="There already is a booking for the car plate '".$checkbooking->getBookingcar()->getPlate()."' !";
                     return $this->renderForm('booking_form/index.html.twig', [
@@ -56,7 +56,7 @@ class BookingManagementController extends AbstractController
                     ]);
                 }
             //dd($booking);
-            $booking->setBookingcar($booking->getBookingcar());
+            $booking->setCar($booking->getCar());
             $entityManager->persist($booking);
             $entityManager->flush();
             return $this->redirectToRoute('app_booking_management');
@@ -76,7 +76,7 @@ class BookingManagementController extends AbstractController
         if (!$booking) {
             return $this->redirectToRoute('app_booking_management');
         }
-        $booking->setBookingCar(null);
+        $booking->setCar(null);
         $entityManager->remove($booking);
         $entityManager->flush();
 
