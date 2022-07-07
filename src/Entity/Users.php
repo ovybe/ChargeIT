@@ -150,5 +150,13 @@ class Users implements UserInterface, PasswordAuthenticatedUserInterface
         $this->cars = $cars;
     }
 
+    public function addCar(Car $car): self
+    {
+        if (!$this->cars->contains($car)) {
+            $this->cars[] = $car;
+        }
+        return $this;
+    }
+
 
 }

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Booking;
 use App\Entity\Car;
-use App\Entity\UsersCars;
+use App\Entity\UsersCarsREDUNDANT;
 use App\Form\BookingType;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,19 +18,18 @@ class BookingManagementController extends AbstractController
     public function index(Request $request,ManagerRegistry $doctrine): Response
     {
         $user=$this->getUser();
-        $ip=$request->getClientIp();
 
         $entityManager= $doctrine->getManager();
-        $usercars=$entityManager->getRepository(UsersCars::class)->findBy(['user'=>$user->getId()]);
-        $carsrepo=$entityManager->getRepository(Car::class);
-        $cars=array();
-        foreach($usercars as $u){
-        $cars[]= $carsrepo->findOneBy(['plate'=>$u->getCarId()]);
-        }
+
+        $cars=$user->getCars();
+
         $bookings=array();
         foreach($cars as $c){
-        $bookings[]=$entityManager->getRepository(Booking::class)->findBy(['car'=>$c->getPlate()]);
+//            $book=$c->getCarBooking();
+            if(($book=$c->getCarBooking())!=null)
+                $bookings[]=$book;
         }
+//        dd($bookings);
         return $this->render('booking_management/index.html.twig', [
             'controller_name' => 'BookingManagementController',
             'booking'=>$bookings,
@@ -45,16 +44,19 @@ class BookingManagementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $checkbooking = $entityManager->getRepository(Booking::class)->findOneBy(['car'=>$booking->getCar()->getPlate()]);
+            $checkbooking=$booking->getBookingcar()->getCarBooking();
             if($checkbooking!=null)
                 {
+                    dd($checkbooking);
                     //error occured
-                    $error="There already is a booking for the car plate '".$checkbooking->getCar()->getPlate()."' !";
+                    $error="There already is a booking for the car plate '".$checkbooking->getBookingcar()->getPlate()."' !";
                     return $this->renderForm('booking_form/index.html.twig', [
                         'form' => $form,
                         'errors' => $error,
                     ]);
                 }
+            //dd($booking);
+            $booking->setBookingcar($booking->getBookingcar());
             $entityManager->persist($booking);
             $entityManager->flush();
             return $this->redirectToRoute('app_booking_management');
@@ -63,5 +65,21 @@ class BookingManagementController extends AbstractController
         return $this->renderForm('booking_form/index.html.twig', [
             'form' => $form,
         ]);
+    }
+    #[Route('/booking/delete/{uuid}', name: 'app_booking_delete')]
+    public function delete(Request $request,ManagerRegistry $doctrine, string $uuid): Response
+    {
+        $entityManager = $doctrine->getManager();
+        $bookingsrepo= $entityManager->getRepository(Booking::class);
+        $booking = $bookingsrepo->findOneBy(['id'=>$uuid]);
+
+        if (!$booking) {
+            return $this->redirectToRoute('app_booking_management');
+        }
+        $booking->setBookingCar(null);
+        $entityManager->remove($booking);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_booking_management');
     }
 }

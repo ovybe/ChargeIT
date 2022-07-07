@@ -19,9 +19,9 @@ class Booking
     #[ORM\Column(type: 'integer')]
     private $duration;
 
-    #[ORM\ManyToOne(targetEntity: Car::class)]
-    #[ORM\JoinColumn(referencedColumnName: 'plate',nullable: false)]
-    private $car;
+    #[ORM\OneToOne(mappedBy: 'carbooking', targetEntity: Car::class, cascade: ['persist', 'remove'])]
+    #[ORM\JoinColumn(name:'car_id',referencedColumnName: 'plate',nullable: false)]
+    private $bookingcar;
 
     #[ORM\ManyToOne(targetEntity: Plug::class)]
     #[ORM\JoinColumn(referencedColumnName: 'id',nullable: false)]
@@ -58,12 +58,12 @@ class Booking
 
     public function getCar(): ?Car
     {
-        return $this->car;
+        return $this->bookingcar;
     }
 
     public function setCar(?Car $car): self
     {
-        $this->car = $car;
+        $this->bookingcar = $car;
 
         return $this;
     }
@@ -76,6 +76,28 @@ class Booking
     public function setPlug(?Plug $plug): self
     {
         $this->plug = $plug;
+
+        return $this;
+    }
+
+    public function getBookingcar(): ?Car
+    {
+        return $this->bookingcar;
+    }
+
+    public function setBookingcar(?Car $bookingcar): self
+    {
+        // unset the owning side of the relation if necessary
+        if ($bookingcar === null && $this->bookingcar !== null) {
+            $this->bookingcar->setCarBooking(null);
+        }
+
+        // set the owning side of the relation if necessary
+        if ($bookingcar !== null && $bookingcar->getCarBooking() !== $this) {
+            $bookingcar->setCarBooking($this);
+        }
+
+        $this->bookingcar = $bookingcar;
 
         return $this;
     }

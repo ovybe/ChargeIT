@@ -15,6 +15,7 @@ class CreatePlugType extends AbstractType
             ->add('status')
             ->add('type')
             ->add('max_output')
+            ->add('price')
         ;
     }
 

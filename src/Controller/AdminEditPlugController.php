@@ -34,8 +34,7 @@ class AdminEditPlugController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
-            $stationrepo = $entityManager->getRepository(Station::class);
-            $station = $stationrepo->findOneBy(['id' => $plug->getStation()]);
+            $station=$plug->getStation();
 
             return $this->redirectToRoute('app_admin_edit_station',[
                 'uuid' => $station->getUuid(),
@@ -55,8 +54,7 @@ class AdminEditPlugController extends AbstractController
         $plugsrepo= $entityManager->getRepository(Plug::class);
         $plug = $plugsrepo->findOneBy(['id'=>$uuid]);
 
-        $stationrepo = $entityManager->getRepository(Station::class);
-        $station = $stationrepo->findOneBy(['id' => $plug->getStation()]);
+        $station = $plug->getStation();
 
         if (!$plug) {
             return $this->redirectToRoute('app_admin_edit_station',[

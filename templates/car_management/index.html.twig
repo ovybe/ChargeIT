@@ -9,9 +9,12 @@
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
     table { text-align: center;}
 </style>
-
     <div class="d-grid gap-2 col-6 mx-auto mb-2" style="width:50%">
         <h3 style="text-align:center">Car Management</h3>
+        {% if error|default %}
+            <p>An error has occurred: </p>
+            <p style="color:red;">{{ error }}</p>
+        {% endif %}
     <a class="btn btn-outline-dark" href="/create/car/">Create Car</a>
     </div>
     <div id="cardiv" class="container-md">

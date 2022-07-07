@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\StationRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Uuid;
 
@@ -27,6 +29,14 @@ class Station
 
     #[ORM\Column(type: 'string', length: 50)]
     private $name;
+
+    #[ORM\OneToMany(mappedBy: 'station', targetEntity: Plug::class, orphanRemoval: true)]
+    private $stationPlugs;
+
+    public function __construct()
+    {
+        $this->stationPlugs = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -88,6 +98,36 @@ class Station
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Plug>
+     */
+    public function getStationPlugs(): Collection
+    {
+        return $this->stationPlugs;
+    }
+
+    public function addStationPlug(Plug $stationPlug): self
+    {
+        if (!$this->stationPlugs->contains($stationPlug)) {
+            $this->stationPlugs[] = $stationPlug;
+            $stationPlug->setStation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStationPlug(Plug $stationPlug): self
+    {
+        if ($this->stationPlugs->removeElement($stationPlug)) {
+            // set the owning side to null (unless already changed)
+            if ($stationPlug->getStation() === $this) {
+                $stationPlug->setStation(null);
+            }
+        }
 
         return $this;
     }

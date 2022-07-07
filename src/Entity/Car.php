@@ -12,7 +12,7 @@ class Car
 {
     #[ORM\Id]
     #[ORM\Column(type: 'string', length: 10)]
-    #[ORM\OneToMany(targetEntity:'UsersCars',mappedBy:'car')]
+    #[ORM\OneToMany(targetEntity:'UsersCarsREDUNDANT',mappedBy:'car')]
     private string $plate;
 
     #[ORM\Column(type: 'string', length: 10)]
@@ -21,12 +21,23 @@ class Car
     //#[ORM\OneToMany(mappedBy: 'user', targetEntity: Users::class, orphanRemoval: true, indexBy: 'id')]
     #[ORM\ManyToMany(targetEntity: Users::class,mappedBy: 'cars')]
     private mixed $users;
+
+    #[ORM\OneToOne(inversedBy: 'bookingcar', targetEntity: Booking::class, cascade: ['persist', 'remove'])]
+    private $carbooking;
     /**
      * @return mixed
      */
     public function getUsers()
     {
         return $this->users;
+    }
+
+    public function addUser(Users $user): self
+    {
+        if (!$this->users->contains($user)) {
+            $this->users[] = $user;
+        }
+        return $this;
     }
 
     /**
@@ -98,6 +109,18 @@ class Car
     public function removeUserId(Users $userId): self
     {
         $this->user_id->removeElement($userId);
+
+        return $this;
+    }
+
+    public function getCarBooking(): ?Booking
+    {
+        return $this->carbooking;
+    }
+
+    public function setCarBooking(?Booking $carbooking): self
+    {
+        $this->carbooking = $carbooking;
 
         return $this;
     }

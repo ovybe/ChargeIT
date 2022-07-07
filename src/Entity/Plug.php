@@ -17,7 +17,7 @@ class Plug
     #[ORM\Column(type: 'boolean')]
     private $status;
 
-    #[ORM\ManyToOne(targetEntity: Station::class)]
+    #[ORM\ManyToOne(targetEntity: Station::class, inversedBy: 'stationPlugs')]
     #[ORM\JoinColumn(referencedColumnName: 'id',nullable: false)]
     private $station;
 
@@ -29,6 +29,7 @@ class Plug
 
     #[ORM\Column(type: 'integer')]
     private $price;
+
 
     public function getId(): ?int
     {
@@ -47,9 +48,9 @@ class Plug
         return $this;
     }
 
-    public function getStation(): ?int
+    public function getStation(): ?Station
     {
-        return $this->station->getId();
+        return $this->station;
     }
 
     public function setStation(Station $station): self
@@ -104,4 +105,5 @@ class Plug
         $this->price = $price;
         return $this;
     }
+
 }

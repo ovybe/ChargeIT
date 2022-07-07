@@ -22,20 +22,23 @@
                 <th scope="col">Start Time</th>
                 <th scope="col">End Time</th>
                 <th scope="col">Duration</th>
+                <th scope="col">Actions</th>
             </tr>
             </thead>
             <tbody>
         {% for row in booking %}
-            {% for row2 in row %}
-                <th>{{ row2.id }}</th>
-                <th>{{ row2.car.plate }}</th>
-                <th>{{ row2.plug.id }}</th>
-                <th>{{ row2.plug.type }}</th>
-                <th>{{ row2.starttime|date(dateFormat) }}</th>
-                <th>{{ row2.starttime|date_modify(+row2.duration~'hours')|date(dateFormat) }}</th>
-                <th>{{ row2.duration }}</th>
-            {% endfor %}
+            <tr>
+            <th>{{ row.id }}</th>
+            <th>{{ row.bookingcar.plate }}</th>
+            <th>{{ row.plug.id }}</th>
+            <th>{{ row.plug.type }}</th>
+            <th>{{ row.starttime|date(dateFormat) }}</th>
+            <th>{{ row.starttime|date_modify(+row.duration~'minutes')|date(dateFormat) }}</th>
+            <th>{{ row.duration }}</th>
+            <th><a class="btn btn-dark" href="/booking/delete/{{ row.id }}">Delete</a></th>
+            </tr>
         {% endfor %}
             </tbody>
     </table>
+    </div>
 {% endblock %}

@@ -35,20 +35,16 @@
                     <td>{{ row.name }}</td>
                     <td>{{ row.location }}</td>
                     <td>
-                        {% if row.id in plug|keys %}
-                            {% for row2 in plug[row.id] %}
-                                {{ row2.type }}
+                            {% for plug in row.getStationPlugs %}
+                                {{ plug.type }}
                                 <br>
                             {% endfor %}
-                        {% endif %}
                     </td>
                     <td>
-                        {% if row.id in plug|keys %}
-                            {% for row2 in plug[row.id] %}
-                                {{ row2.max_output }}
+                            {% for plug in row.getStationPlugs() %}
+                                {{ plug.max_output }}
                                 <br>
                             {% endfor %}
-                        {% endif %}
                     </td>
                 </tr>
             {% endfor %}

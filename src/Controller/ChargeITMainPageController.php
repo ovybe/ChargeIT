@@ -5,7 +5,7 @@ namespace App\Controller;
 use App\Entity\Car;
 use App\Entity\Plug;
 use App\Entity\Station;
-use App\Entity\UsersCars;
+use App\Entity\UsersCarsREDUNDANT;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,13 +18,12 @@ class ChargeITMainPageController extends AbstractController
     public function index(ManagerRegistry $doctrine): Response
     {
         $user = $this->getUser();
+
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // Fetch stations, plugs, cars
         $station = $doctrine->getRepository(Station::class)->findAll();
-        $plug = $doctrine->getRepository(Plug::class)->findAll();
-        $userscars = $doctrine->getRepository(UsersCars::class)->findBy(['user'=>$user->getUserIdentifier()]);
         //Build the array containing the plugs based on each station
-        $output=$this->build_plug_array($plug,$station);
+//        $output=$this->build_plug_array($plug,$station);
         // FOR DEBUGGING
 //        foreach($output as $o){
 //            print_r($o);
@@ -40,7 +39,7 @@ class ChargeITMainPageController extends AbstractController
         return $this->render('charge_it_main_page/index.html.twig', [
             'controller_name' => 'ChargeITMainPageController',
             'station' => $station,
-            'plug' => $output,
+//            'plug' => $output,
             'name' => $this->getUser()->getName(),
         ]);
     }
@@ -51,15 +50,9 @@ class ChargeITMainPageController extends AbstractController
         $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         // Fetch stations, plugs, cars
         $station = $doctrine->getRepository(Station::class)->findAll();
-        $plug = $doctrine->getRepository(Plug::class)->findAll();
-        $userscars = $doctrine->getRepository(UsersCars::class)->findBy(['user'=>$user->getId()]);
-        $carsrepo = $doctrine->getRepository(Car::class);
-        $cars = array();
-        foreach($userscars as $u){
-            $cars[]=$carsrepo->findOneBy(['plate' => $u->getCarId()]);
-        }
+        $cars = $user->getCars();
         //Build the array containing the plugs based on each station
-        $output=$this->build_plug_array($plug,$station);
+//        $output=$this->build_plug_array($plug,$station);
         // FOR DEBUGGING
 //        foreach($output as $o){
 //            print_r($o);
@@ -75,7 +68,7 @@ class ChargeITMainPageController extends AbstractController
         return $this->render('charge_it_main_page_user/index.html.twig', [
             'controller_name' => 'ChargeITMainPageController',
             'station' => $station,
-            'plug' => $output,
+//            'plug' => $output,
             'name' => $this->getUser()->getName(),
             'cars' => $cars,
         ]);

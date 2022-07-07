@@ -5,7 +5,7 @@ namespace App\Form;
 use App\Entity\Booking;
 use App\Entity\Car;
 use App\Entity\Plug;
-use App\Entity\UsersCars;
+use App\Entity\UsersCarsREDUNDANT;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -27,12 +27,7 @@ class BookingType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $user=$this->security->getUser();
-        $userscars=$this->entityManager->getRepository(UsersCars::class)->findBy(['user'=>$user->getId()]);
-        $cars=array();
-        $carsrepo=$this->entityManager->getRepository(Car::class);
-        foreach($userscars as $uc){
-            $cars[]=$carsrepo->findOneBy(['plate'=>$uc->getCarId()]);
-        }
+        $cars=$user->getCars();
         $cararray=array();
         $plugsrepo=$this->entityManager->getRepository(Plug::class);
         $plugs=$plugsrepo->findBy(['station'=>$options['stationid']]);
@@ -40,6 +35,7 @@ class BookingType extends AbstractType
         foreach($plugs as $p){
             $availableplugs[$p->getId().". ".$p->getType()]=$p;
         }
+
         foreach($cars as $c){
             $plate=$c->getPlate();
             $cararray[$plate]=$c;
