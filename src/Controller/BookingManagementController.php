@@ -4,8 +4,12 @@ namespace App\Controller;
 
 use App\Entity\Booking;
 use App\Entity\Car;
+use App\Entity\Station;
+use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use App\Form\BookingType;
 use Doctrine\Persistence\ManagerRegistry;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,11 +26,12 @@ class BookingManagementController extends AbstractController
 
         $cars=$user->getCars();
 
-        $bookings=array();
+        $bookings=new ArrayCollection();
         foreach($cars as $c){
 //            $book=$c->getCarBooking();
-            if(($book=$c->getBooking())!=null)
-                $bookings[]=$book;
+            if(count($book=$c->getBookings()))
+                $bookings->add($book);
+//                $bookings[]=$book;
         }
 //        dd($bookings);
         return $this->render('booking_management/index.html.twig', [
@@ -37,25 +42,38 @@ class BookingManagementController extends AbstractController
     #[Route('/booking/create/{uuid}', name: 'app_booking_create')]
     public function create(Request $request,ManagerRegistry $doctrine,string $uuid): Response
     {
+        $cars= $this->getUser()->getCars();
+        $caparray=new stdClass();
+        foreach($cars as $c){
+            $plate=$c->getPlate();
+            $caparray->$plate=$c->getCapacity();
+        }
         $booking = new Booking();
         $entityManager = $doctrine->getManager();
+        $station= $entityManager->getRepository(Station::class)->findOneBy(['id'=>$uuid]);
+        $plugs=new stdClass();
+        foreach($station->getPlugs() as $plug){
+            $pid=$plug->getId();
+            $plugs->$pid=$plug->getMax_Output();
+        }
         $form = $this->createForm(BookingType::class,$booking, options: ['stationid'=>$uuid]);
+
+
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $checkbooking=$booking->getCar()->getBooking();
-            if($checkbooking!=null)
-                {
-//                    dd($checkbooking);
-                    //error occured
-                    $error="There already is a booking for the car plate '".$checkbooking->getCar()->getPlate()."' !";
+            $checkbooking=$booking->getCar()->getBookings();
+            foreach($checkbooking as $cb){
+                if($cb->getStartTime()>new DateTime('now')){
+                    $error="There already is a booking for the car plate '".$cb->getCar()->getPlate()."' !";
                     return $this->renderForm('booking_form/index.html.twig', [
                         'form' => $form,
                         'errors' => $error,
+                        'capacities' => $caparray,
                     ]);
                 }
+            }
             //dd($booking);
-            $booking->setCar($booking->getCar());
             $entityManager->persist($booking);
             $entityManager->flush();
             return $this->redirectToRoute('app_booking_management');
@@ -63,6 +81,8 @@ class BookingManagementController extends AbstractController
 
         return $this->renderForm('booking_form/index.html.twig', [
             'form' => $form,
+            'capacities' => $caparray,
+            'plugs' => $plugs,
         ]);
     }
     #[Route('/booking/delete/{uuid}', name: 'app_booking_delete')]

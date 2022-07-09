@@ -18,6 +18,7 @@ class AdminEditPlugController extends AbstractController
     #[Route('/admin/edit/plug/{uuid}', name: 'app_admin_edit_plug')]
     public function update(Request $request,ManagerRegistry $doctrine, string $uuid): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $entityManager = $doctrine->getManager();
 
         $plugsrepo= $entityManager->getRepository(Plug::class);
@@ -50,6 +51,7 @@ class AdminEditPlugController extends AbstractController
     #[Route('/admin/delete/plug/{uuid}', name: 'app_admin_delete_plug')]
     public function delete(Request $request,ManagerRegistry $doctrine, string $uuid): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $entityManager = $doctrine->getManager();
         $plugsrepo= $entityManager->getRepository(Plug::class);
         $plug = $plugsrepo->findOneBy(['id'=>$uuid]);
@@ -72,6 +74,7 @@ class AdminEditPlugController extends AbstractController
     #[Route('/admin/create/plug/{uuid}', name: 'app_create_plug')]
     public function create(Request $request,ManagerRegistry $doctrine, string $uuid): Response
     {
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         $plug = new Plug();
         $form = $this->createForm(CreatePlugType::class, $plug);
         $form->handleRequest($request);

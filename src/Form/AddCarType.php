@@ -22,6 +22,7 @@ class AddCarType extends AbstractType
                 ]
             ],)
             ->add('plug_type')
+            ->add('capacity')
         ;
     }
 

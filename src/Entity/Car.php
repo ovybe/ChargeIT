@@ -22,8 +22,12 @@ class Car
     #[ORM\ManyToMany(targetEntity: Users::class,mappedBy: 'cars')]
     private mixed $users;
 
-    #[ORM\OneToOne(inversedBy: 'car', targetEntity: Booking::class, cascade: ['persist', 'remove'])]
-    private $booking;
+    #[ORM\OneToMany(mappedBy: 'car', targetEntity: Booking::class, orphanRemoval: true, indexBy: 'id')]
+//    #[ORM\OneToOne(inversedBy: 'car', targetEntity: Booking::class, cascade: ['persist', 'remove'])]
+    private $bookings;
+
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private $capacity;
     /**
      * @return mixed
      */
@@ -113,14 +117,26 @@ class Car
         return $this;
     }
 
-    public function getBooking(): ?Booking
+    public function getBookings(): mixed
     {
-        return $this->booking;
+        return $this->bookings;
     }
 
-    public function setBooking(?Booking $booking): self
+    public function setBookings($bookings): self
     {
-        $this->booking = $booking;
+        $this->bookings = $bookings;
+
+        return $this;
+    }
+
+    public function getCapacity(): ?int
+    {
+        return $this->capacity;
+    }
+
+    public function setCapacity(?int $capacity): self
+    {
+        $this->capacity = $capacity;
 
         return $this;
     }

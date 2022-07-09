@@ -2,8 +2,12 @@
 
 {% block title %}Hello!{% endblock %}
 
-{% block body %}
-    {% include 'navbar/navbar.html.twig' %}
+{% block content %}
+<script>
+        var capacities = {{ capacities|json_encode()|raw }}
+        var plugs = {{ plugs|json_encode()|raw }}
+</script>
+    <script src="/assets/booking/script.js"></script>
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
@@ -15,17 +19,40 @@
         <p style="color:red;">{{ errors }}</p>
     {% endif %}
     {{ form_start(form) }}
-{#    <label for="station">Station:</label>#}
-{#    <select class="form-control" id="station">#}
-{#        {% for oneStation in stations %}#}
-{#            {% set selected = '' %}#}
-{#            <option value="{{ oneStation.id }}">{{ oneStation.name }}</option>#}
-{#        {% endfor %}#}
-{#    </select>#}
-    {{ form_row(form.start_time) }}
-    {{ form_row(form.duration)  }}
-    {{ form_row(form.car) }}
-    {{ form_row(form.plug) }}
+    <div class="col-5">
+        <label for="booking_duration">Start Time</label>
+        <div class="input-group mb-2">
+            {{ form_widget(form.start_time, {'value':'now'|date()}) }}
+        </div>
+    </div>
+    <div class="col-5">
+        <label for="booking_duration">Duration</label>
+        <div class="input-group mb-2">
+            {{ form_widget(form.duration, {'attr': {'id':'duration','min':0,'maxlength':'3'}}) }}
+            <span class="input-group-text">minutes</span>
+        </div>
+    </div>
+    <div class="col-5">
+        <label for="booking_car">Car</label>
+        <div class="input-group mb-2">
+            {{ form_widget(form.car, {'attr': {'id':'car','onchange':'calculateDuration()'}}) }}
+        </div>
+    </div>
+    <div class="col-5">
+        <label for="booking_plug">Plug</label>
+        <div class="input-group mb-2">
+            {{ form_widget(form.plug, {'attr': {'id':'plug','onchange':'calculateDuration()'}}) }}
+        </div>
+    </div>
+        <div class="col-4">
+            <label for="battery">Battery Charge</label>
+            <div class="input-group mb-2">
+            {{ form_widget(form.battery, {'attr': {'id':'battery','maxlength':'3','onchange':'calculateDuration()'}}) }}
+            <span class="input-group-text">%</span>
+            </div>
+        </div>
+
+
     {{ form_errors(form) }}
 
     {% if app.request.attributes.get('_route')=='app_create_booking' %}

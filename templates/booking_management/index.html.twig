@@ -2,8 +2,7 @@
 
 {% block title %}Hello BookingManagementController!{% endblock %}
 
-{% block body %}
-    {% include 'navbar/navbar.html.twig' %}
+{% block content %}
     {% set dateFormat = 'Y-m-d h:i A' %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
@@ -27,17 +26,19 @@
             </thead>
             <tbody>
         {% for row in booking %}
+            {% for row2 in row %}
             <tr>
-            <th>{{ row.id }}</th>
-            <th>{{ row.car.plate }}</th>
-            <th>{{ row.plug.id }}</th>
-            <th>{{ row.plug.type }}</th>
-            <th>{{ row.starttime|date(dateFormat) }}</th>
-            <th>{{ row.starttime|date_modify(+row.duration~'minutes')|date(dateFormat) }}</th>
-            <th>{{ row.duration }}</th>
-            <th><a class="btn btn-dark" href="/booking/delete/{{ row.id }}">Delete</a></th>
+            <th>{{ row2.id }}</th>
+            <th>{{ row2.car.plate }}</th>
+            <th>{{ row2.plug.id }}</th>
+            <th>{{ row2.plug.type }}</th>
+            <th>{{ row2.starttime|date(dateFormat) }}</th>
+            <th>{{ row2.starttime|date_modify(+row2.duration~'minutes')|date(dateFormat) }}</th>
+            <th>{{ row2.duration }}</th>
+            <th><a class="btn btn-dark" href="/booking/delete/{{ row2.id }}">Delete</a></th>
             </tr>
-        {% endfor %}
+            {% endfor %}
+            {% endfor %}
             </tbody>
     </table>
     </div>

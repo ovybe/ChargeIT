@@ -19,7 +19,8 @@ class ChargeITMainPageController extends AbstractController
     {
         $user = $this->getUser();
 
-        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+//        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $this->denyAccessUnlessGranted('ROLE_ADMIN');
         // Fetch stations, plugs, cars
         $station = $doctrine->getRepository(Station::class)->findAll();
         //Build the array containing the plugs based on each station
