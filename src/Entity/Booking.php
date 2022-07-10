@@ -19,7 +19,7 @@ class Booking
     #[ORM\Column(type: 'integer')]
     private $duration;
 
-    #[ORM\ManyToOne(inversedBy: 'booking', targetEntity: Car::class)]
+    #[ORM\ManyToOne(inversedBy: 'bookings', targetEntity: Car::class)]
 //    #[ORM\OneToOne(mappedBy: 'booking', targetEntity: Car::class, cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(referencedColumnName: 'plate',nullable: false)]
     private $car;

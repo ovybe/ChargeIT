@@ -31,7 +31,7 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarNav">
 
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav text-center me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <a class="nav-link {{ app.request.get('_route') == 'app_chargeit_main_page_user' ? 'active' }}" aria-current="page" href="/">Home</a>
                         </li>
@@ -39,7 +39,7 @@
                             <a class="nav-link dropdown-toggle {{ app.request.get('_route') == 'app_car_management' or app.request.get('_route') == 'app_create_car' ? 'active' }}" href="/car/management" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Cars
                             </a>
-                            <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
                                 <li><a class="dropdown-item" href="/car/management/">My Cars</a></li>
                                 <li><a class="dropdown-item" href="/create/car/">Add Car</a></li>
                             </ul>
@@ -57,9 +57,11 @@
                             <a class="nav-link disabled" href="#">Settings</a>
                         </li>
                     </ul>
+                    <ul class="navbar-nav mb-2 mb-lg-0">
+                    <span class="navbar-text text-center">Hello, {{ app.user.name }}!</span>
+                    <a class="btn btn-outline-danger ms-2" href="{{ path('app_logout') }}">Log out</a>
+                    </ul>
                 </div>
-                <span class="navbar-text">Hello, {{ app.user.name }}!</span>
-                <a class="btn btn-outline-danger ml-2" href="{{ path('app_logout') }}">Log out</a>
             </div>
         </nav>
     {% endblock %}

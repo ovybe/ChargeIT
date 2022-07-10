@@ -26,7 +26,7 @@ function calculateDuration(){
                 // TC = TIME CALCULATED, T = TOTAL TIME, B = BATTERY
                 // FORMULA: T=TC-(B/100)*TC
                 duration.value=Math.ceil(timecalc-(battery/100)*timecalc);
-            };
+            }
         },
         error: function(data){
             alert("Estimation failed! Assuming average car charging time.");

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Booking;
 use App\Entity\Car;
 use App\Entity\Station;
+use DateInterval;
 use DateTime;
 use Doctrine\Common\Collections\ArrayCollection;
 use App\Form\BookingType;
@@ -30,8 +31,11 @@ class BookingManagementController extends AbstractController
         foreach($cars as $c){
 //            $book=$c->getCarBooking();
             if(count($book=$c->getBookings()))
-                $bookings->add($book);
-//                $bookings[]=$book;
+            {   $current_date=new DateTime('now');
+                foreach($book as $b)
+                    if($b->getStartTime()>=$current_date || $b->getStartTime()->add(DateInterval::createFromDateString($b->getDuration().' minutes'))>$current_date)
+                        $bookings->add($b);
+            }
         }
 //        dd($bookings);
         return $this->render('booking_management/index.html.twig', [
@@ -54,6 +58,7 @@ class BookingManagementController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $checkbooking=$booking->getCar()->getBookings();
+//            dd($checkbooking);
             foreach($checkbooking as $cb){
                 if($cb->getStartTime()>new DateTime('now')){
                     $error="There already is a booking for the car plate '".$cb->getCar()->getPlate()."' !";

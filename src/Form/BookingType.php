@@ -34,7 +34,7 @@ class BookingType extends AbstractType
         $cars=$user->getCars();
         $cararray=array();
         $plugsrepo=$this->entityManager->getRepository(Plug::class);
-        $plugs=$plugsrepo->findBy(['station'=>$options['stationid']]);
+        $plugs=$plugsrepo->findBy(['station'=>$options['stationid'],'status'=>1]);
         $availableplugs=array();
         foreach($plugs as $p){
             $availableplugs[$p->getId().". ".$p->getType()]=$p;
@@ -44,13 +44,15 @@ class BookingType extends AbstractType
             $plate=$c->getPlate();
             $cararray[$plate]=$c;
         }
+        $timecalc=60*($cararray[array_key_first($cararray)]->getCapacity()/$availableplugs[array_key_first($availableplugs)]->getMax_Output());
+        $duration=ceil($timecalc-(0.3)*$timecalc);
         // REMINDER: LOOK INTO GEOLOCATION (geocoder)
         $builder
             ->add('start_time',DateTimeType::class,[
                 'data'=>new DateTime('now'),
             'years'=>[date('Y'),date('Y')+1,date('Y')+2],
             ])
-            ->add('duration',NumberType::class,['data'=>'480'])
+            ->add('duration',NumberType::class,['data'=>$duration])
             ->add('car',ChoiceType::class,[
                 'choices'=>[
                     'Your cars'=> $cararray,
@@ -59,7 +61,7 @@ class BookingType extends AbstractType
             ->add('plug',ChoiceType::class,[
                 'choices'=>$availableplugs
             ])
-            ->add('battery', TextType::class,['data'=>'100','mapped'=>false])
+            ->add('battery', TextType::class,['data'=>'30','mapped'=>false])
         ;
     }
 
