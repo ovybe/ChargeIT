@@ -40,24 +40,15 @@ class BookingManagementController extends AbstractController
         ]);
     }
     #[Route('/booking/create/{uuid}', name: 'app_booking_create')]
-    public function create(Request $request,ManagerRegistry $doctrine,string $uuid): Response
+    public function create(Request $request,ManagerRegistry $doctrine,string $uuid) : Response
     {
         $cars= $this->getUser()->getCars();
-        $caparray=new stdClass();
-        foreach($cars as $c){
-            $plate=$c->getPlate();
-            $caparray->$plate=$c->getCapacity();
-        }
+
         $booking = new Booking();
         $entityManager = $doctrine->getManager();
         $station= $entityManager->getRepository(Station::class)->findOneBy(['id'=>$uuid]);
-        $plugs=new stdClass();
-        foreach($station->getPlugs() as $plug){
-            $pid=$plug->getId();
-            $plugs->$pid=$plug->getMax_Output();
-        }
-        $form = $this->createForm(BookingType::class,$booking, options: ['stationid'=>$uuid]);
 
+        $form = $this->createForm(BookingType::class,$booking, options: ['stationid'=>$uuid]);
 
         $form->handleRequest($request);
 
@@ -69,7 +60,7 @@ class BookingManagementController extends AbstractController
                     return $this->renderForm('booking_form/index.html.twig', [
                         'form' => $form,
                         'errors' => $error,
-                        'capacities' => $caparray,
+                        'uuid' => $uuid,
                     ]);
                 }
             }
@@ -81,9 +72,45 @@ class BookingManagementController extends AbstractController
 
         return $this->renderForm('booking_form/index.html.twig', [
             'form' => $form,
-            'capacities' => $caparray,
-            'plugs' => $plugs,
+            'uuid' => $uuid,
+
         ]);
+
+    }
+    #[Route('/booking/ajax/{id}', name: 'app_booking_ajax')]
+    public function ajax(Request $request,ManagerRegistry $doctrine): Response
+    {
+//        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+            $routeParameters = $request->attributes->get('id');
+            $user = $this->getUser();
+            $cars = $user->getCars();
+
+            $entityManager = $doctrine->getManager();
+            $stationsrepo = $entityManager->getRepository(Station::class);
+//            return new Response(json_encode($routeParameters),status:418);
+            $station = $stationsrepo->findOneBy(['id' => $routeParameters]);
+
+            if (!$station) {
+                return new Response('{}',status:404);
+            }
+            $caparray=new stdClass();
+            foreach($cars as $c){
+                $plate=$c->getPlate();
+                $caparray->$plate=$c->getCapacity();
+            }
+            $plugs=new stdClass();
+            foreach($station->getPlugs() as $plug){
+                $pid=$plug->getId();
+                $plugs->$pid=$plug->getMax_Output();
+            }
+            $jsonData = new stdClass();
+            $jsonData->plugs = $plugs;
+            $jsonData->capacities = $caparray;
+
+            return new Response(json_encode($jsonData));
+//        }
+//        return new Response();
     }
     #[Route('/booking/delete/{uuid}', name: 'app_booking_delete')]
     public function delete(Request $request,ManagerRegistry $doctrine, string $uuid): Response

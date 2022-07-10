@@ -4,8 +4,7 @@
 
 {% block content %}
 <script>
-        var capacities = {{ capacities|json_encode()|raw }}
-        var plugs = {{ plugs|json_encode()|raw }}
+        var sid={{ uuid }};
 </script>
     <script src="/assets/booking/script.js"></script>
 <style>

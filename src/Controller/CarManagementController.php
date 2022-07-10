@@ -82,7 +82,7 @@ class CarManagementController extends AbstractController
             // check regex
             // ^[a-zA-Z][a-zA-Z] \d\d [a-zA-Z][a-zA-Z][a-zA-Z]$|^[a-zA-Z] \d\d [a-zA-Z][a-zA-Z][a-zA-Z]$
             $this->CarVerifyCreate($entityManager,$car,$user);
-            return $this->redirectToRoute('app_chargeit_main_page_user');
+            return $this->redirectToRoute('app_car_management');
         }
 
         return $this->renderForm('create_car/index.html.twig', [

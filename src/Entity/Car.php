@@ -93,30 +93,6 @@ class Car
         return $this;
     }
 
-    /**
-     * @return Collection<int, Users>
-     */
-    public function getUserId(): Collection
-    {
-        return $this->user_id;
-    }
-
-    public function addUserId(Users $userId): self
-    {
-        if (!$this->user_id->contains($userId)) {
-            $this->user_id[] = $userId;
-        }
-
-        return $this;
-    }
-
-    public function removeUserId(Users $userId): self
-    {
-        $this->user_id->removeElement($userId);
-
-        return $this;
-    }
-
     public function getBookings(): mixed
     {
         return $this->bookings;
