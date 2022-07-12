@@ -15,6 +15,7 @@ class CreateStationController extends AbstractController
 
     public function create_station(): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         return $this->renderForm('create_station/index.html.twig', [
             // insert stuff here if you want
         ]);

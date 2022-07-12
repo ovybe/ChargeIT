@@ -71,6 +71,7 @@ class CarManagementController extends AbstractController
     #[Route('/create/car/', name: 'app_create_car')]
     public function create(Request $request,ManagerRegistry $doctrine): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $doctrine->getManager();
         $user = $this->getUser();
 
@@ -93,6 +94,7 @@ class CarManagementController extends AbstractController
     #[Route('/edit/car/{plate}', name: 'app_edit_car')]
     public function edit(Request $request,ManagerRegistry $doctrine,string $plate): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $doctrine->getManager();
         $user = $this->getUser();
 
@@ -128,6 +130,7 @@ class CarManagementController extends AbstractController
     #[Route('/delete/car/{plate}', name: 'app_delete_car')]
     public function delete(Request $request,ManagerRegistry $doctrine,string $plate): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $doctrine->getManager();
         $user = $this->getUser();
         $cars=$user->getCars();
@@ -153,6 +156,7 @@ class CarManagementController extends AbstractController
     #[Route('/car/management', name: 'app_car_management')]
     public function manage(Request $request,ManagerRegistry $doctrine): Response
     {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
         $entityManager = $doctrine->getManager();
         $user = $this->getUser();
         $usercars=$user->getCars(); // GET CARS FROM USER

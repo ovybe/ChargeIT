@@ -27,7 +27,7 @@
     <div class="col-5">
         <label for="booking_duration">Duration</label>
         <div class="input-group mb-2">
-            {{ form_widget(form.duration, {'attr': {'id':'duration','min':0,'maxlength':'3'}}) }}
+            {{ form_widget(form.duration, {'attr': {'id':'duration','maxlength':'5'}}) }}
             <span class="input-group-text">minutes</span>
         </div>
     </div>
@@ -53,8 +53,8 @@
 
 
     {{ form_errors(form) }}
-
-    {% if app.request.attributes.get('_route')=='app_create_booking' %}
+    <div id="warning"></div>
+    {% if app.request.attributes.get('_route')=='app_booking_create' %}
     <button type="submit" class="btn">Create</button>
     {% else %}
     <button type="submit" class="btn">Edit</button>

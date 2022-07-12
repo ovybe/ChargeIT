@@ -5,9 +5,12 @@ namespace App\Controller;
 use App\Entity\Car;
 use App\Entity\Plug;
 use App\Entity\Station;
-use App\Entity\UsersCarsREDUNDANT;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ManagerRegistry;
+use stdClass;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -74,6 +77,99 @@ class ChargeITMainPageController extends AbstractController
             'cars' => $cars,
         ]);
     }
+    #[Route('/fetcher/snp/', name: 'app_fetcher_snp')]
+    public function stationAndPlugFetcher(Request $request,ManagerRegistry $doctrine): Response
+    {
+        //        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+//        $routeParameters = $request->attributes->get('id');
+
+        $entityManager = $doctrine->getManager();
+        $stationsrepo = $entityManager->getRepository(Station::class);
+        $stations = $stationsrepo->findAll();
+
+        if (!$stations) {
+            return new Response('{}',status:404);
+        }
+
+//        $plugs=new stdClass();
+//        foreach($stations as $s){
+//
+//        foreach($s->getPlugs() as $plug){
+//            $pid=$plug->getId();
+//            $plugs->$pid=$plug->getMax_Output();
+//        }
+//        }
+        $jsonData = [];
+        foreach($stations as $s){
+            $jsonObj = new stdClass();
+        $jsonObj->id = $s->getId();
+        $jsonObj->uuid = $s->getUuid();
+        $jsonObj->name = $s->getName();
+        $jsonObj->location = $s->getLocation();
+        $jsonObj->latitude = $s->getLatitude();
+        $jsonObj->longitude = $s->getLongitude();
+        $types=[];
+        foreach($s->getPlugs() as $plug){
+            $plug_type=$plug->getType();
+            if(!in_array($plug_type,$types)){
+                $types[]=$plug_type;
+            }
+        }
+        $jsonObj->types = $types;
+        // fetch plugs
+        $jsonData[]=$jsonObj;
+        }
+//        $jsonData->plugs = $plugs;
+//        $jsonData->stations = json_encode($stations);
+
+        return new Response(json_encode($jsonData));
+//        }
+//        return new Response();
+    }
+    #[Route('/fetcher/plugs/', name: 'app_fetcher_plugs')]
+    public function plugFetcher(Request $request,ManagerRegistry $doctrine): Response
+    {
+        //        if ($request->isXmlHttpRequest() || $request->query->get('showJson') == 1) {
+
+        $routeParameter = $request->get('id');
+//        dd($routeParameters);
+
+        $entityManager = $doctrine->getManager();
+        $stationsrepo = $entityManager->getRepository(Station::class);
+        $station = $stationsrepo->findOneBy(['uuid'=>$routeParameter]);
+
+        if (!$station) {
+            return new Response('{}',status:404);
+        }
+
+//        $plugs=new stdClass();
+//        foreach($stations as $s){
+//
+//        foreach($s->getPlugs() as $plug){
+//            $pid=$plug->getId();
+//            $plugs->$pid=$plug->getMax_Output();
+//        }
+//        }
+        $plugs=$station->getPlugs();
+        $jsonData = [];
+        foreach($plugs as $p){
+            $jsonObj = new stdClass();
+            $jsonObj->id = $p->getId();
+            $jsonObj->type = $p->getType();
+            $jsonObj->status = $p->isStatus();
+            $jsonObj->output = $p->getMax_Output();
+            // fetch plugs
+            $jsonData[]=$jsonObj;
+        }
+//        $jsonData->plugs = $plugs;
+//        $jsonData->stations = json_encode($stations);
+
+        return new JsonResponse($jsonData);
+//        }
+//        return new Response();
+    }
+
     public function build_plug_array(array $plug,array $station): ?array{
         $output = array();
         foreach($plug as $p){

@@ -1,39 +1,68 @@
-function calculateDuration(){
-    var plugs;
-    var capacities;
-    var sel_car=document.getElementById('booking_car');
-    var plate=sel_car.options[sel_car.selectedIndex].text;
-    var sel_plug=document.getElementById('booking_plug');
-    var plug=sel_plug.options[sel_plug.selectedIndex].text;
-    var plug_id= plug.substring(0, plug.indexOf('.'));
-    var battery_input=document.getElementById('booking_battery');
-    var battery=battery_input.value;
-    var duration=document.getElementById('booking_duration');
+var plugs;
+var capacities;
+var car_plugs;
+var sel_car;
+var sel_plug;
+$(document).ready(function(){
     $.ajax({
         url: "/booking/ajax/"+sid,
         success: function(data){
             jsonData=JSON.parse(data);
             plugs=jsonData['plugs'];
             capacities=jsonData['capacities'];
-            if(battery==null)
-                battery=30;
-            // CALCULATE DURATION
-            // alert(battery);
-            if(capacities[plate]==null)
-                duration.value=(8*60)-(battery/100)*(8*60);
-            else{
-                var timecalc=(capacities[plate]/plugs[plug_id])*60;
-                // TC = TIME CALCULATED, T = TOTAL TIME, B = BATTERY
-                // FORMULA: T=TC-(B/100)*TC
-                duration.value=Math.ceil(timecalc-(battery/100)*timecalc);
-            }
+            car_plugs=jsonData['carplugs'];
+            // alert('yoohoo');
+            sel_car=document.getElementById('booking_car');
+            sel_plug=document.getElementById('booking_plug');
+            calculateDuration();
+            checkCompatibility();
+
         },
         error: function(data){
-            alert("Estimation failed! Assuming average car charging time.");
-            duration.value=(8*60)-(battery/100)*(8*60);
         }
     });
+});
+$(document).on('change',['#booking_car','#booking_duration'],function() {
+    checkCompatibility();
+});
 
+function calculateDuration(){
+    var plate=sel_car.options[sel_car.selectedIndex].text;
+    var plug=sel_plug.options[sel_plug.selectedIndex].text;
+    var plug_id= plug.substring(0, plug.indexOf('.'));
+    var battery_input=document.getElementById('booking_battery');
+    var battery=battery_input.value;
+    var duration=document.getElementById('booking_duration');
 
+    if(battery==null || battery<0){
+        battery=30;
+        battery_input.value=30;
+    }
+    // CALCULATE DURATION
+    // alert(battery);
+    if(capacities!=null && plugs!=null){
+        if(capacities[plate]==null)
+            duration.value=(8*60)-(battery/100)*(8*60);
+        else{
+             var timecalc=(capacities[plate]/plugs[plug_id])*60;
+            // TC = TIME CALCULATED, T = TOTAL TIME, B = BATTERY
+            // FORMULA: T=TC-(B/100)*TC
+            duration.value=Math.ceil(timecalc-(battery/100)*timecalc);
+        }
+    }
+}
+function checkCompatibility(){
+    var plate=sel_car.options[sel_car.selectedIndex].text;
+    var plug=sel_plug.options[sel_plug.selectedIndex].text;
+    var plug_name=plug.substring(plug.indexOf('.') + 2);
+    console.log(plug_name);
+    if(car_plugs[plate]!==plug_name){
+        if($('#plug_warn','#warning').length === 0){
+            $('#warning').append('<p id="plug_warn">Warning: the current selected plate and plug are incompatible. Continue at your own risk.</p>')
+        }
+    }
+    else{
+        $('#warning p').remove();
+    }
 
 }

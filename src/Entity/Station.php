@@ -22,9 +22,9 @@ class Station
     #[ORM\Column(type: 'string', length: 30)]
     private $location;
 
-    #[ORM\Column(type:'decimal', length: 6, precision:5)]
+    #[ORM\Column(type:'decimal',  precision:18, scale:15)]
     private $latitude;
-    #[ORM\Column(type:'decimal', length: 6, precision:5)]
+    #[ORM\Column(type:'decimal',  precision:18, scale:15)]
     private $longitude;
 
     #[ORM\Column(type: 'string', length: 50)]

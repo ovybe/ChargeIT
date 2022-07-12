@@ -6,6 +6,7 @@ use App\Entity\Booking;
 use App\Entity\Car;
 use App\Entity\Plug;
 use App\Entity\UsersCarsREDUNDANT;
+use DateInterval;
 use DateTime;
 use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Component\Form\AbstractType;
@@ -44,15 +45,25 @@ class BookingType extends AbstractType
             $plate=$c->getPlate();
             $cararray[$plate]=$c;
         }
-        $timecalc=60*($cararray[array_key_first($cararray)]->getCapacity()/$availableplugs[array_key_first($availableplugs)]->getMax_Output());
-        $duration=ceil($timecalc-(0.3)*$timecalc);
-        // REMINDER: LOOK INTO GEOLOCATION (geocoder)
+//        $timecalc=60*($cararray[array_key_first($cararray)]->getCapacity()/$availableplugs[array_key_first($availableplugs)]->getMax_Output());
+//        $duration=ceil($timecalc-(0.3)*$timecalc);
+        $current_date=new DateTime('now');
         $builder
             ->add('start_time',DateTimeType::class,[
-                'data'=>new DateTime('now'),
-            'years'=>[date('Y'),date('Y')+1,date('Y')+2],
+                'years'=>[date('Y'),date('Y')+1,date('Y')+2],
+                'widget'=>'single_text',
+                'attr'=>
+                    [
+                        'value'=>$current_date->format('Y-m-d\TH:i'),
+                    'min'=>$current_date->format('Y-m-d\TH:i'),
+                        'max'=>$current_date->add(new DateInterval('P' . 1 . 'Y'))->format('Y-m-d\TH:i'),
+                    ]
             ])
-            ->add('duration',NumberType::class,['data'=>$duration])
+            ->add('duration',NumberType::class,[
+                'attr'=>[
+                    'min' => 1,
+                ]
+            ])
             ->add('car',ChoiceType::class,[
                 'choices'=>[
                     'Your cars'=> $cararray,
