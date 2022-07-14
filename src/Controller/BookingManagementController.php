@@ -20,7 +20,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class BookingManagementController extends AbstractController
 {
     public function returnError(Form $form,string $error,string $uuid): Response{
-        return $this->renderForm('booking_form/index.html.twig', [
+        return $this->renderForm('/booking/booking_form.html.twig', [
             'form' => $form,
             'errors' => $error,
             'uuid' => $uuid,
@@ -38,7 +38,6 @@ class BookingManagementController extends AbstractController
 
         $bookings=new ArrayCollection();
         foreach($cars as $c){
-//            $book=$c->getCarBooking();
             if(count($book=$c->getBookings()))
             {   $current_date=new DateTime('now');
                 foreach($book as $b)
@@ -46,8 +45,7 @@ class BookingManagementController extends AbstractController
                         $bookings->add($b);
             }
         }
-//        dd($bookings);
-        return $this->render('booking_management/index.html.twig', [
+        return $this->render('/booking/booking_management.html.twig', [
             'controller_name' => 'BookingManagementController',
             'booking'=>$bookings,
         ]);
@@ -67,6 +65,14 @@ class BookingManagementController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $checkplug=$booking->getPlug();
+            $checkplugbookings=$checkplug->getBookings();
+            foreach($checkplugbookings as $plugbooking){
+                if($booking->checkOverlap($plugbooking)){
+                    return $this->returnError($form,"The booking overlaps another booking on this plug which ends at ".(clone $plugbooking->getStartTime())->add(new DateInterval('PT' . $plugbooking->getDuration() . 'M'))->format('H:i')."!",$uuid);
+                }
+            }
+//            dd($booking);
             $durationcheck=$booking->getDuration();
             if($durationcheck<0 || $durationcheck>10080){
                 return $this->returnError($form,"Duration can't be lower than 0 min or higher than 10080 min (a week)",$uuid);
@@ -75,7 +81,7 @@ class BookingManagementController extends AbstractController
             $checkbooking=$booking->getCar()->getBookings();
 //            dd($checkbooking);
             foreach($checkbooking as $cb){
-                if($cb->getStartTime()>new DateTime('now') || $cb->getStartTime()->add(new DateInterval('PT' . $cb->getDuration() . 'M'))>new DateTime('now')){
+                if($cb->checkBookingTime()){
                     return $this->returnError($form,"There already is a booking for the car plate '".$cb->getCar()->getPlate()."' !",$uuid);
                 }
             }
@@ -85,13 +91,14 @@ class BookingManagementController extends AbstractController
             return $this->redirectToRoute('app_booking_management');
         }
 
-        return $this->renderForm('booking_form/index.html.twig', [
+        return $this->renderForm('/booking/booking_form.html.twig', [
             'form' => $form,
             'uuid' => $uuid,
 
         ]);
 
     }
+
     #[Route('/booking/ajax/{id}', name: 'app_booking_ajax')]
     public function ajax(Request $request,ManagerRegistry $doctrine): Response
     {
@@ -129,6 +136,32 @@ class BookingManagementController extends AbstractController
             return new Response(json_encode($jsonData));
 //        }
 //        return new Response();
+    }
+    #[Route('/booking/availableplugs/', name: 'app_booking_availableplugs')]
+    public function setAvailablePlugs(Request $request,ManagerRegistry $doctrine): Response
+    {
+        $this->denyAccessUnlessGranted('IS_AUTHENTICATED_FULLY');
+        $routeSID = $request->attributes->get('sid');
+        $routeTime = $request->attributes->get('time');
+        $user = $this->getUser();
+
+        $entityManager = $doctrine->getManager();
+        $stationsrepo = $entityManager->getRepository(Station::class);
+
+        $station = $stationsrepo->findOneBy(['id' => $routeSID]);
+
+        if (!$station) {
+            return new Response('{}',status:404);
+        }
+        $plugs=new stdClass();
+        foreach($station->getPlugs() as $plug){
+            $pid=$plug->getId();
+            $plugs->$pid=$plug->getMax_Output();
+        }
+        $jsonData = new stdClass();
+        $jsonData->plugs = $plugs;
+
+        return new Response(json_encode($jsonData));
     }
     #[Route('/booking/delete/{uuid}', name: 'app_booking_delete')]
     public function delete(Request $request,ManagerRegistry $doctrine, string $uuid): Response

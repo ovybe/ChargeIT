@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BookingRepository;
+use DateInterval;
+use DateTime;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: BookingRepository::class)]
@@ -24,7 +26,7 @@ class Booking
     #[ORM\JoinColumn(referencedColumnName: 'plate',nullable: false)]
     private $car;
 
-    #[ORM\ManyToOne(targetEntity: Plug::class)]
+    #[ORM\ManyToOne(targetEntity: Plug::class, inversedBy: 'bookings')]
     #[ORM\JoinColumn(referencedColumnName: 'id',nullable: false)]
     private $plug;
 
@@ -89,5 +91,18 @@ class Booking
         $this->car = $car;
 
         return $this;
+    }
+    public function checkBookingTime():bool
+    {
+        $currentdate=new DateTime('now');
+        return ($this->start_time>$currentdate && (clone $this->getStartTime())->add(new DateInterval('PT' . $this->getDuration() . 'M'))>$currentdate);
+    }
+    public function checkOverlap(Booking $booking):bool
+    {
+        $booking_start=$booking->getStartTime();
+        $booking_end=(clone $booking->getStartTime())->add(new DateInterval('PT' . $booking->getDuration() . 'M'));
+        $our_booking_end=(clone $this->getStartTime())->add(new DateInterval('PT' . $this->getDuration() . 'M'));
+        // if this returns true it failed.
+        return (($this->start_time<=$booking_start && $our_booking_end>$booking_start) || ($this->start_time<$booking_end && $our_booking_end>=$booking_end));
     }
 }

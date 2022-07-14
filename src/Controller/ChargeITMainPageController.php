@@ -40,7 +40,7 @@ class ChargeITMainPageController extends AbstractController
         }
         // FOR DEBUGGING
         //return new Response('Done.');
-        return $this->render('charge_it_main_page/index.html.twig', [
+        return $this->render('admin/chargeit_main_page.html.twig', [
             'controller_name' => 'ChargeITMainPageController',
             'station' => $station,
 //            'plug' => $output,

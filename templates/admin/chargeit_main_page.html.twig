@@ -1,0 +1,90 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ChargeIT Admin Page{% endblock %}
+
+{% block content %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    table,th,td { border:1px solid black; text-align: center; }
+    #map {
+        position:absolute;
+        height : calc( 100% - 132px ); }
+</style>
+
+    <form style="text-align:center;" action="{{ path('app_create_station') }}">
+        <a class="btn btn-outline-dark w-100" id="centerButton" onclick="reCenter()">Recenter</a>
+        <input class="btn btn-outline-dark w-100" type="submit" value="Create Station" />
+    </form>
+    <div id="map" class="w-100"></div>
+    <div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasExampleLabel">Station View</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            <div>
+                <h5 id="sName"></h5>
+                <p id="sLoc"></p>
+                <table id="plugsTable" class="table">
+                    <thead>
+                    <tr>
+                        <th scope="col">Status</th>
+                        <th scope="col">Type</th>
+                        <th scope="col">Max_Output</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+                <a id="sBook" class="btn btn-dark" href="#">Book</a>
+                <a id="sEdit" class="btn btn-dark" href="#">Edit</a>
+                <a id="sDelete" class="btn btn-dark" href="#">Delete</a>
+            </div>
+        </div>
+    </div>
+{#    <div id="stationdiv" class="container-md">#}
+{#        <table class="table table-responsive align-middle table-striped table-hover">#}
+{#            <thead class="table-dark">#}
+{#            <tr>#}
+{#                <th scope="col">Actions</th>#}
+{#                <th scope="col">Statie</th>#}
+{#                <th scope="col">Locatie</th>#}
+{#                <th scope="col">Tip</th>#}
+{#                <th scope="col">Output</th>#}
+{#            </tr>#}
+{#            </thead>#}
+{#            <tbody>#}
+{#            #}
+{#            {% for row in station %}#}
+{#                <tr>#}
+{#                    <td>#}
+{#                        <a class="btn btn-dark" href="/view/station/{{ row.uuid }}">View</a> <br>#}
+{#                        <a class="btn btn-dark" href="/admin/edit/station/{{ row.uuid }}">Edit</a>#}
+{#                        <a class="btn btn-dark" href="/admin/delete/station/{{ row.uuid }}">Delete</a>#}
+{#                    </td>#}
+{#                    <td>{{ row.name }}</td>#}
+{#                    <td>{{ row.location }}</td>#}
+{#                    <td>#}
+{#                            {% for plug in row.getPlugs() %}#}
+{#                                {{ plug.type }}#}
+{#                                <br>#}
+{#                            {% endfor %}#}
+{#                    </td>#}
+{#                    <td>#}
+{#                            {% for plug in row.getPlugs() %}#}
+{#                                {{ plug.max_output }}#}
+{#                                <br>#}
+{#                            {% endfor %}#}
+{#                    </td>#}
+{#                </tr>#}
+{#            {% endfor %}#}
+{#            </tbody>#}
+{#        </table>#}
+{#    </div>#}
+    <script src="/assets/admin/script.js"></script>
+    <script
+            src="https://maps.googleapis.com/maps/api/js?key={{ google_maps_api }}&callback=initMap&v=weekly"
+            defer
+    ></script>
+{% endblock %}

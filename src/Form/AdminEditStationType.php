@@ -14,6 +14,8 @@ class AdminEditStationType extends AbstractType
         $builder
             ->add('location')
             ->add('name')
+            ->add('latitude')
+            ->add('longitude')
         ;
     }
 

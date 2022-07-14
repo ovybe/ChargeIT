@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Station{% endblock %}
+
+{% block content %}
+    <style>
+        .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+        .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+        table,th,td { border:1px solid black; text-align: center; }
+    </style>
+
+    <div id="formdiv" class="container-md">
+        {{ form_start(form) }}
+        {% if errors|default %}
+            <p class="text-center">An error has occurred: </p>
+            <p class="text-center"  style="color:red;">{{ errors }}</p>
+        {% endif %}
+        <div class="row row-cols-auto w-100 text-center align-items-center justify-content-center">
+            <div class="col-md-auto">
+                <label for="station_name">Name</label>
+                <div class="input-group mb-2">
+                    {{ form_widget(form.name, {'attr': {'maxlengh':'50','id':'name','class':'form-control','placeholder': 'Statia Cool B)'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-auto w-100 text-center align-items-center justify-content-center">
+            <div class="col-md-auto">
+                <label for="station_location">Location</label>
+                <div class="input-group mb-2">
+                    {{ form_widget(form.location, {'attr': {'id':'location','class':'form-control','placeholder': 'Location'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-auto w-100 text-center align-items-center justify-content-center">
+            <div class="col-md-auto">
+                <label for="booking_name">Latitude</label>
+                <div class="input-group mb-2">
+                    {{ form_widget(form.latitude, {'attr': {'id':'latitude','maxlength':'18'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-auto w-100 text-center align-items-center justify-content-center">
+            <div class="col-md-auto">
+                <label for="booking_name">Longitude</label>
+                <div class="input-group mb-2">
+                    {{ form_widget(form.longitude, {'attr': {'id':'longitude','maxlength':'18'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="row mb-2 row-cols-auto w-100 align-items-center justify-content-center">
+            <div class="col-md-auto">
+                <a class="btn btn-outline-dark" href="/admin/create/plug/{{ station.id }}">Create plug</a>
+            </div>
+        </div>
+            <table class="table table-responsive align-middle table-striped table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th scope="col">Plug Id</th>
+                    <th scope="col">Tip</th>
+                    <th scope="col">Output</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for row2 in plug %}
+                    <tr>
+                        <td>{{ row2.id }}</td>
+                        <td>{{ row2.type }}</td>
+                        <td>{{ row2.max_output }}</td>
+                        <td>
+                            {% if row2.status==1 %}
+                                ON
+                            {% else %}
+                                OFF
+                            {% endif  %}
+                        </td>
+                        <td><a class="btn btn-dark" href="/admin/edit/plug/{{ row2.id }}">Edit</a>
+                            <a class="btn btn-dark" href="/admin/delete/plug/{{ row2.id }}">Delete</a>
+                        </td>
+
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        <div class="row mb-2 row-cols-auto w-100 align-items-center justify-content-center">
+            <div class="col-md-auto">
+                <button type="submit" class="btn btn-outline-dark">Edit</button>
+            </div>
+        </div>
+
+        {{ form_end(form) }}
+
+    </div>
+{% endblock %}

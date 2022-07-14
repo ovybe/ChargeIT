@@ -4,6 +4,7 @@ namespace App\Form;
 
 use App\Entity\Car;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -15,14 +16,19 @@ class AddCarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('plate',TextType::class,['constraints' =>
+            ->add('plate',TextType::class,[
+                'attr'=>['maxlength'=>9],
+                'constraints' =>
                 [
                 new NotBlank(),
                     new Regex('/^[a-zA-Z][a-zA-Z] \d\d [a-zA-Z][a-zA-Z][a-zA-Z]$|^[a-zA-Z] \d\d [a-zA-Z][a-zA-Z][a-zA-Z]$/  '),
                 ]
             ],)
             ->add('plug_type')
-            ->add('capacity')
+            ->add('capacity',NumberType::class,[
+                'attr'=>
+                    ['maxlength'=>3]
+            ])
         ;
     }
 

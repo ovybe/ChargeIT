@@ -38,7 +38,8 @@ class BookingType extends AbstractType
         $plugs=$plugsrepo->findBy(['station'=>$options['stationid'],'status'=>1]);
         $availableplugs=array();
         foreach($plugs as $p){
-            $availableplugs[$p->getId().". ".$p->getType()]=$p;
+            if($p->isStatus())
+                $availableplugs[$p->getId().". ".$p->getType()]=$p;
         }
 
         foreach($cars as $c){
@@ -47,6 +48,7 @@ class BookingType extends AbstractType
         }
 //        $timecalc=60*($cararray[array_key_first($cararray)]->getCapacity()/$availableplugs[array_key_first($availableplugs)]->getMax_Output());
 //        $duration=ceil($timecalc-(0.3)*$timecalc);
+        // TODO: Use locale
         $current_date=new DateTime('now');
         $builder
             ->add('start_time',DateTimeType::class,[

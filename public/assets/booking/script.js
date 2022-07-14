@@ -56,13 +56,32 @@ function checkCompatibility(){
     var plug=sel_plug.options[sel_plug.selectedIndex].text;
     var plug_name=plug.substring(plug.indexOf('.') + 2);
     console.log(plug_name);
-    if(car_plugs[plate]!==plug_name){
+    if(car_plugs[plate].toLowerCase()!==plug_name.toLowerCase()){
         if($('#plug_warn','#warning').length === 0){
-            $('#warning').append('<p id="plug_warn">Warning: the current selected plate and plug are incompatible. Continue at your own risk.</p>')
+            $('#warning').append('<p style="color:orange;"id="plug_warn">Warning: the current selected plate and plug are incompatible. Continue at your own risk.</p>')
         }
     }
     else{
         $('#warning p').remove();
     }
+
+}
+
+function checkTimeRange(){
+    var sel_time=document.getElementById('booking_start_time');
+    var time=sel_time.value;
+    $.ajax({
+        url: "/booking/availableplugs/",
+        data:{
+            time:time,
+            sid:sid,
+        },
+        success: function(data){
+            jsonData=JSON.parse(data);
+
+        },
+        error: function(data){
+        }
+    });
 
 }

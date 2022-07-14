@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Edit Plug{% endblock %}
+
+{% block content %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    {{ form_start(form) }}
+    {% if errors|default %}
+        <p class="text-center">An error has occurred: </p>
+        <p class="text-center"  style="color:red;">{{ errors }}</p>
+    {% endif %}
+    <div class="row row-cols-auto text-center align-items-center center justify-content-center">
+        <div class="col-md-auto">
+            <label for="booking_name">Type</label>
+            <div class="input-group mb-2">
+                {{ form_widget(form.type, {'attr': {'id':'type','maxlength':'50'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-auto text-center align-items-center center justify-content-center">
+        <div class="col-md-auto">
+            <label for="booking_name">Max Output</label>
+            <div class="input-group mb-2">
+                {{ form_widget(form.max_output, {'attr': {'id':'max_output','maxlength':'5'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-auto text-center align-items-center center justify-content-center">
+        <div class="col-md-auto">
+            <label for="booking_name">Status</label>
+            <div class="form-check form-switch">
+                {{ form_widget(form.status, {'attr': {'id':'status','class':'form-check-input','role':'switch'}}) }}
+            </div>
+        </div>
+    </div>
+    <div class="row row-cols-auto align-items-center justify-content-center">
+        <div class="col-md-auto">
+            <button type="submit" class="btn btn-outline-dark">Edit</button>
+        </div>
+    </div>
+    {{ form_end(form) }}
+
+</div>
+{% endblock %}

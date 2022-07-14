@@ -17,6 +17,10 @@ use Symfony\Component\Routing\Annotation\Route;
 class CarManagementController extends AbstractController
 {
     public function CarVerifyCreate(ObjectManager $entityManager,Car $car,Users $user){
+        if($car->getCapacity()>999 || $car->getCapacity()<0)
+            return 1;
+        if(strlen($car->getPlug_Type())>15)
+            return 1;
         $carcheck = $entityManager->getRepository(Car::class)->findOneBy(['plate' => $car->getPlate()]);
         if ($carcheck!=null) {
             // check if the user already has this plate in his car list
@@ -86,7 +90,7 @@ class CarManagementController extends AbstractController
             return $this->redirectToRoute('app_car_management');
         }
 
-        return $this->renderForm('create_car/index.html.twig', [
+        return $this->renderForm('car/create_car.html.twig', [
             'controller_name' => 'CarManagementController',
             'form' => $form,
         ]);
@@ -122,7 +126,7 @@ class CarManagementController extends AbstractController
             return $this->redirectToRoute('app_chargeit_main_page_user');
         }
 
-        return $this->renderForm('create_car/index.html.twig', [
+        return $this->renderForm('car/create_car.html.twig', [
             'controller_name' => 'CarManagementController',
             'form' => $form,
         ]);
@@ -161,7 +165,7 @@ class CarManagementController extends AbstractController
         $user = $this->getUser();
         $usercars=$user->getCars(); // GET CARS FROM USER
         // LAZY INITIALIZATION
-        return $this->renderForm('car_management/index.html.twig', [
+        return $this->renderForm('car/car_management.html.twig', [
             'cars' => $usercars,
         ]);
     }

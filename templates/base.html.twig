@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="UTF-8">
         <title>{% block title %}Welcome!{% endblock %}</title>
@@ -13,7 +13,7 @@
                     integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
                     crossorigin="anonymous"></script>
             <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.3/font/bootstrap-icons.css">
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.0/font/bootstrap-icons.css">
         {% endblock %}
 
         {% block javascripts %}
@@ -33,10 +33,13 @@
 
                     <ul class="navbar-nav text-center me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
-                            <a class="nav-link {{ app.request.get('_route') == 'app_chargeit_main_page_user' ? 'active' }}" aria-current="page" href="/">Home</a>
+                            <a class="nav-link {{ app.request.get('_route') == 'app_chargeit_main_page_user' ? 'active' }}" aria-current="page" href="/"><i class="bi bi-house"></i>
+                                Home
+                            </a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle {{ app.request.get('_route') == 'app_car_management' or app.request.get('_route') == 'app_create_car' ? 'active' }}" href="/car/management" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="bi bi-car-front"></i>
                                 Cars
                             </a>
                             <ul class="dropdown-menu text-center" aria-labelledby="navbarDropdown">
@@ -46,15 +49,24 @@
                         </li>
 
                         <li class="nav-item">
-                            <a class="nav-link {{ app.request.get('_route') == 'app_booking_management' ? 'active' }}" href="/booking/management">Booking</a>
+                            <a class="nav-link {{ app.request.get('_route') == 'app_booking_management' ? 'active' }}" href="/booking/management">
+                                <i class="bi bi-journal-text"></i>
+                                Booking
+                            </a>
                         </li>
                         {% if is_granted('ROLE_ADMIN') %}
                             <li class="nav-item">
-                                <a class="nav-link {{ app.request.get('_route') == 'app_chargeit_main_page' ? 'active' }}" href="/admin/">Admin</a>
+                                <a class="nav-link {{ app.request.get('_route') == 'app_chargeit_main_page' ? 'active' }}" href="/admin/">
+                                    <i class="bi bi-person-circle"></i>
+                                    Admin
+                                </a>
                             </li>
                         {% endif %}
                         <li class="nav-item">
-                            <a class="nav-link disabled" href="#">Settings</a>
+                            <a class="nav-link disabled" href="#">
+                                <i class="bi bi-gear"></i>
+                                Settings
+                            </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav mb-2 mb-lg-0">

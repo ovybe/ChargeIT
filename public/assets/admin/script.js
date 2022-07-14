@@ -1,11 +1,11 @@
 let stations=[];
 let last_window_opened;
 let map;
-
 function initMap() {
     map = new google.maps.Map(document.getElementById("map"), {
         zoom: 5,
         center: { lat: 46, lng: 24 },
+        clickableIcons: false,
     });
     $.ajax({
         url: "/fetcher/snp/",
@@ -70,7 +70,7 @@ function setMarkers() {
             for(let i=0;i<Object.keys(station['types']).length;i++) {
                 contentString=contentString+'<p class="ms-1 mb-1 fw-light">'+station['types'][i]+'</p>';
             }
-                contentString+='<a class="ms-1" href="https://www.google.com/maps/search/'+station['location'].replace('+','%2B')+'">View on Maps</a></div><div class="text-center"><button id="canvasbtn'+station['id']+'" onclick="populateCanvas('+station['id']+')" class="btn mb-1 ms-1 btn-outline-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">View</button><a class="btn mb-1 ms-1 btn-outline-dark" href="/booking/create/'+station['id']+'">Book</a></div></div>';
+                contentString+='<a class="ms-1" href="https://www.google.com/maps/search/'+station['location'].replace('+','%2B')+'">View on Maps</a></div><div class="text-center"><button id="canvasbtn'+station['id']+'" onclick="populateCanvas('+station['id']+')" class="btn mb-1 ms-1 btn-outline-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasExample" aria-controls="offcanvasExample">View</button><a class="btn mb-1 ms-1 btn-outline-dark" href="/admin/edit/station/'+station['uuid']+'">Edit</a><a class="btn mb-1 ms-1 btn-outline-dark" href="/admin/delete/station/'+station['uuid']+'">Delete</a></div></div>';
          infowindow[i] = new google.maps.InfoWindow({
              content: structuredClone(contentString),
          });
@@ -85,7 +85,7 @@ function setMarkers() {
              infowindow[i].open({
                  anchor: marker[i],
                  map,
-                 shouldFocus: false,
+                 shouldFocus: true,
              });
              if(last_window_opened)
                  last_window_opened.close();
@@ -115,7 +115,7 @@ function populateCanvas(uuid){
     // if(!$('.offcanvas').hasClass('show'))
     //     $('#canvasbtn').trigger('click');
     var station;
-    console.log(stations);
+    // console.log(stations);
     for(var i=0;i<stations.length;i++){
         if(stations[i]['id']===uuid){
             station=stations[i];
@@ -125,6 +125,8 @@ function populateCanvas(uuid){
     $('#sName').text(station['name']);
     $('#sLoc').text(station['location']);
     $('#sBook').attr("href", "/booking/create/"+station['id']);
+    $('#sEdit').attr("href","/admin/edit/station/"+station['uuid']);
+    $('#sDelete').attr("href","/admin/delete/station/"+station['uuid']);
     $.ajax({
         url: "/fetcher/plugs/",
         data:{

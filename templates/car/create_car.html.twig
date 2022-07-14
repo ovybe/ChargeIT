@@ -1,0 +1,71 @@
+{% extends 'base.html.twig' %}
+{% block title %}
+{% if app.request.attributes.get('_route')=='app_create_car' %}
+    Create Car
+{% else %}
+    Edit Car
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+    #infocap {
+        display: none; }
+    #questionspan:hover {
+        cursor: pointer;
+    }
+    #questionspan:hover #infocap{
+        display: block;
+    }
+</style>
+    <div class="h-100">
+        <h1 class="text-center">Create a car</h1>
+    {{ form_start(form) }}
+        <div class="row row-cols-auto w-100 text-center align-items-center center justify-content-center">
+            <div class="col-md-auto">
+                <label for="car_plate">Plate</label>
+                {{ form_errors(form.plate) }}
+                <div class="input-group mb-2">
+                    {{ form_widget(form.plate, {'attr': {'id':'car_plate','class':'form-control','placeholder': 'AR 00 TES'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-auto w-100 text-center align-items-center center justify-content-center">
+            <div class="col-md-auto">
+                <label for="plug_type">Plug Type</label>
+                {{ form_errors(form.plug_type) }}
+                <div class="input-group mb-2">
+                    {{ form_widget(form.plug_type, {'attr': {'id':'plug_type','class':'form-control','placeholder': 'Plug Type'}}) }}
+                </div>
+            </div>
+        </div>
+        <div class="row row-cols-auto w-100 text-center align-items-center center justify-content-center">
+            <div class="col-md-auto">
+                <label for="capacity">Capacity</label>
+                {{ form_errors(form.capacity) }}
+                <div class="input-group mb-2">
+                    <span title="This is an optional field, we'll estimate the charging time based on battery capacity." class="input-group-text ml-3" id="questionspan"><i class="bi bi-info-circle"></i></span>
+                    {{ form_widget(form.capacity, {'type':'number','attr': {'id':'capacity','max':'999','class':'form-control','placeholder': 'Capacity'}}) }}
+                </div>
+            </div>
+        </div>
+{#        <div class="col-3">#}
+{#            <div class="input-group mb-2">#}
+{#            <span title="This is an optional field, we'll estimate the charging time based on battery capacity." class="input-group-text ml-3" id="questionspan"><i class="bi bi-question-lg"></i>#}
+{#            </span>#}
+{#                {{ form_widget(form.capacity, {'attr': {'id':'capacity','class':'form-control','placeholder': 'Capacity'}}) }}#}
+{#            </div>#}
+{#        </div>#}
+
+        <div class="row row-cols-auto w-100 align-items-center center justify-content-center">
+    {% if app.request.attributes.get('_route')=='app_create_car' %}
+    <button type="submit" class="btn">Create</button>
+    {% else %}
+    <button type="submit" class="btn">Edit</button>
+    {% endif %}
+        </div>
+    {{ form_end(form) }}
+    </div>
+{% endblock %}

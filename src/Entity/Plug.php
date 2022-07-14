@@ -30,6 +30,9 @@ class Plug
     #[ORM\Column(type: 'integer')]
     private $price;
 
+    #[ORM\OneToMany(mappedBy: 'plug', targetEntity: Booking::class, orphanRemoval: true, indexBy: 'id')]
+    private $bookings;
+
 
     public function getId(): ?int
     {
@@ -105,5 +108,15 @@ class Plug
         $this->price = $price;
         return $this;
     }
+    public function getBookings(): mixed
+    {
+        return $this->bookings;
+    }
 
+    public function setBookings($bookings): self
+    {
+        $this->bookings = $bookings;
+
+        return $this;
+    }
 }
