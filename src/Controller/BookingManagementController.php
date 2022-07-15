@@ -41,8 +41,10 @@ class BookingManagementController extends AbstractController
             if(count($book=$c->getBookings()))
             {   $current_date=new DateTime('now');
                 foreach($book as $b)
-                    if($b->getStartTime()>=$current_date || $b->getStartTime()->add(DateInterval::createFromDateString($b->getDuration().' minutes'))>$current_date)
+                    if($b->getStartTime()>=$current_date || (clone $b->getStartTime())->add(DateInterval::createFromDateString($b->getDuration().' minutes'))>$current_date)
+                    {
                         $bookings->add($b);
+                    }
             }
         }
         return $this->render('/booking/booking_management.html.twig', [

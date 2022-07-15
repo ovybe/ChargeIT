@@ -58,7 +58,7 @@ class BookingType extends AbstractType
                     [
                         'value'=>$current_date->format('Y-m-d\TH:i'),
                     'min'=>$current_date->format('Y-m-d\TH:i'),
-                        'max'=>$current_date->add(new DateInterval('P' . 1 . 'Y'))->format('Y-m-d\TH:i'),
+                        'max'=>(clone$current_date)->add(new DateInterval('P' . 1 . 'Y'))->format('Y-m-d\TH:i'),
                     ]
             ])
             ->add('duration',NumberType::class,[
